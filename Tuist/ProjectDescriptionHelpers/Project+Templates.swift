@@ -37,7 +37,7 @@ extension Project {
                 sources: ["Targets/\(name)/Tests/**"],
                 resources: [],
                 dependencies: [.target(name: name)])
-        return [sources, tests]
+        return [sources]
     }
 
     /// Helper function to create the application target and the unit test target.
@@ -57,7 +57,7 @@ extension Project {
             bundleId: "io.tuist.\(name)",
             infoPlist: .extendingDefault(with: infoPlist),
             sources: ["Targets/\(name)/Sources/**"],
-            resources: ["Targets/\(name)/Resources/**"],
+//            resources: ["Targets/\(name)/Resources/**"],
             dependencies: dependencies
         )
 
@@ -71,6 +71,6 @@ extension Project {
             dependencies: [
                 .target(name: "\(name)")
         ])
-        return [mainTarget, testTarget]
+        return [mainTarget]
     }
 }

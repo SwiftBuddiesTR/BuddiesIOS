@@ -2,21 +2,6 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 import MyPlugin
 
-/*
-                +-------------+
-                |             |
-                |     App     | Contains SwiftBuddiesIOS App target and SwiftBuddiesIOS unit-test target
-                |             |
-         +------+-------------+-------+
-         |         depends on         |
-         |                            |
- +----v-----+                   +-----v-----+
- |          |                   |           |
- |   Kit    |                   |     UI    |   Two independent frameworks to share code and start modularising your app
- |          |                   |           |
- +----------+                   +-----------+
-
- */
 
 // MARK: - Project
 
@@ -24,6 +9,6 @@ import MyPlugin
 let localHelper = LocalHelper(name: "MyPlugin")
 
 // Creates our project using a helper function defined in ProjectDescriptionHelpers
-let project = Project.app(name: "SwiftBuddiesIOS",
+let project = Project.app(name: "SwiftBuddiesMain",
                           platform: .iOS,
-                          additionalTargets: ["SwiftBuddiesIOSKit", "SwiftBuddiesIOSUI"])
+                          additionalTargets: [])
