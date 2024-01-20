@@ -27,19 +27,27 @@ extension Target {
     }
 }
 
+extension TargetDependency {
+    static func makeExternalTarget(name: String) -> TargetDependency {
+        TargetDependency.external(name: name, condition: nil)
+    }
+}
 
 // MARK: - Project
 
 // Local plugin loaded
 let localHelper = LocalHelper(name: "MyPlugin")
 
-let designTarget = Target.makeTarget(name: "Design")
-let feedModule = Target.makeTarget(name: "Feed", dependencies: [.target(designTarget)])
+let networkDependency = TargetDependency.makeExternalTarget(name: "DefaultNetworkOperationPackage")
+let swiftUIXDependency = TargetDependency.makeExternalTarget(name: "SwiftUIX")
+let designTarget = Target.makeTarget(name: "Design", dependencies: [swiftUIXDependency])
+let feedModule = Target.makeTarget(name: "Feed", dependencies: [.target(designTarget), networkDependency])
 
 
 // Creates our project using a helper function defined in ProjectDescriptionHelpers
 let project = Project.app(name: "SwiftBuddiesMain",
                           platform: .iOS,
-                          additionalTargets: [feedModule, designTarget])
+                          additionalTargets: [feedModule, designTarget],
+                          targetDependencies: [networkDependency])
 
 

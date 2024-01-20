@@ -7,10 +7,12 @@ import ProjectDescription
 
 extension Project {
     /// Helper function to create the Project for this ExampleApp
-    public static func app(name: String, platform: Platform, additionalTargets: [Target]) -> Project {
+    public static func app(name: String, platform: Platform, additionalTargets: [Target], targetDependencies: [TargetDependency]? = nil) -> Project {
+        var targetDependencies = targetDependencies ?? []
+        targetDependencies.append(contentsOf: additionalTargets.compactMap({ TargetDependency.target(name: $0.name) }))
         var targets = makeAppTargets(name: name,
                                      platform: platform,
-                                     dependencies: additionalTargets.compactMap { TargetDependency.target(name: $0.name)})
+                                     dependencies: targetDependencies)
         
         
         targets += additionalTargets
@@ -45,13 +47,12 @@ extension Project {
     /// Helper function to create the application target and the unit test target.
     private static func makeAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
         let platform: Platform = platform
-        let infoPlist: [String: InfoPlist.Value] = [
+        let infoPlist: [String: Plist.Value] = [
             "CFBundleShortVersionString": "1.0",
             "CFBundleVersion": "1",
             "UIMainStoryboardFile": "",
             "UILaunchStoryboardName": "LaunchScreen"
             ]
-
         let mainTarget = Target(
             name: name,
             platform: platform,
