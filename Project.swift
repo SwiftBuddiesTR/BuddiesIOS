@@ -41,13 +41,25 @@ let localHelper = LocalHelper(name: "MyPlugin")
 let networkDependency = TargetDependency.makeExternalTarget(name: "DefaultNetworkOperationPackage")
 let swiftUIXDependency = TargetDependency.makeExternalTarget(name: "SwiftUIX")
 let designTarget = Target.makeTarget(name: "Design", dependencies: [swiftUIXDependency])
+
+let contributorsModule = Target.makeTarget(name: "Contributors", dependencies: [.target(designTarget), networkDependency])
+let mapModule = Target.makeTarget(name: "Map", dependencies: [.target(designTarget), networkDependency])
+let aboutModule = Target.makeTarget(name: "About", dependencies: [.target(designTarget), networkDependency])
 let feedModule = Target.makeTarget(name: "Feed", dependencies: [.target(designTarget), networkDependency])
 
 
 // Creates our project using a helper function defined in ProjectDescriptionHelpers
-let project = Project.app(name: "SwiftBuddiesMain",
-                          platform: .iOS,
-                          additionalTargets: [feedModule, designTarget],
-                          targetDependencies: [networkDependency])
+let project = Project.app(
+    name: "SwiftBuddiesMain",
+    platform: .iOS,
+    additionalTargets: [
+        feedModule,
+        mapModule,
+        aboutModule,
+        contributorsModule,
+        designTarget
+    ],
+    targetDependencies: [networkDependency]
+)
 
 
