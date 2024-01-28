@@ -35,7 +35,6 @@ struct AppMain: App {
                         Text("Map")
                     }
                     .tag(AppTab.map)
-                
                 AboutView()
                     .tabItem {
                         Image(systemName: "info.circle")
