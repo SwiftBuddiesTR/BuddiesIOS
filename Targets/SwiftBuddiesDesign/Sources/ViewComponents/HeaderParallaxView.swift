@@ -8,13 +8,18 @@
 
 import SwiftUI
 
-struct HeaderParallaxView<HeaderContent: View, Content: View>: View {
+public struct HeaderParallaxView<HeaderView: View, Content: View>: View {
     @State private var imageHeight: CGFloat = .zero
 
-    var headerView: () -> HeaderContent
+    var headerView: () -> HeaderView
     var content: () -> Content
     
-    var body: some View {
+    public init(@ViewBuilder headerView: @escaping () -> HeaderView, @ViewBuilder content: @escaping () -> Content) {
+        self.headerView = headerView
+        self.content = content
+    }
+    
+    public var body: some View {
         ScrollView(.vertical) {
             GeometryReader { geometry in
                 headerView()
@@ -26,7 +31,7 @@ struct HeaderParallaxView<HeaderContent: View, Content: View>: View {
             .frame(height: 300)
             content()
         }
-        .ignoresSafeArea()
+        .ignoresSafeArea(edges: .top)
     }
     
     private func getHeightForHeaderImage(_ geometry: GeometryProxy) -> CGFloat {

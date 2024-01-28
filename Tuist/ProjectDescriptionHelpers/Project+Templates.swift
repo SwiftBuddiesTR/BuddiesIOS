@@ -7,7 +7,12 @@ import ProjectDescription
 
 extension Project {
     /// Helper function to create the Project for this ExampleApp
-    public static func app(name: String, platform: Platform, additionalTargets: [Target], targetDependencies: [TargetDependency]? = nil) -> Project {
+    public static func app(
+        name: String,
+        platform: Platform,
+        additionalTargets: [Target],
+        targetDependencies: [TargetDependency]? = nil
+    ) -> Project {
         var targetDependencies = targetDependencies ?? []
         targetDependencies.append(contentsOf: additionalTargets.compactMap({ TargetDependency.target(name: $0.name) }))
         var targets = makeAppTargets(name: name,
@@ -17,32 +22,11 @@ extension Project {
         
         targets += additionalTargets
         return Project(name: name,
-                       organizationName: "tuist.io",
+                       organizationName: "SwiftBuddies",
                        targets: targets)
     }
 
     // MARK: - Private
-
-    /// Helper function to create a framework target and an associated unit test target
-    private static func makeFrameworkTargets(name: String, platform: Platform) -> [Target] {
-        let sources = Target(name: name,
-                platform: platform,
-                product: .framework,
-                bundleId: "io.tuist.\(name)",
-                infoPlist: .default,
-                sources: ["Targets/\(name)/Sources/**"],
-                resources: [],
-                dependencies: [])
-        let tests = Target(name: "\(name)Tests",
-                platform: platform,
-                product: .unitTests,
-                bundleId: "io.tuist.\(name)Tests",
-                infoPlist: .default,
-                sources: ["Targets/\(name)/Tests/**"],
-                resources: [],
-                dependencies: [.target(name: name)])
-        return [sources]
-    }
 
     /// Helper function to create the application target and the unit test target.
     private static func makeAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
@@ -57,7 +41,7 @@ extension Project {
             name: name,
             platform: platform,
             product: .app,
-            bundleId: "io.tuist.\(name)",
+            bundleId: "com.swiftbuddies.\(name.lowercased())",
             infoPlist: .extendingDefault(with: infoPlist),
             sources: ["Targets/\(name)/Sources/**"],
 //            resources: ["Targets/\(name)/Resources/**"],
@@ -68,7 +52,7 @@ extension Project {
             name: "\(name)Tests",
             platform: platform,
             product: .unitTests,
-            bundleId: "io.tuist.\(name)Tests",
+            bundleId: "com.swiftbuddies.\(name.lowercased())Tests",
             infoPlist: .default,
             sources: ["Targets/\(name)/Tests/**"],
             dependencies: [

@@ -3,7 +3,7 @@ import ProjectDescriptionHelpers
 import MyPlugin
 
 extension Target {
-    static func makeTarget(name: String, dependencies: [TargetDependency] = []) -> Target {
+    static func makeModule(name: String, dependencies: [TargetDependency] = [], hasResources: Bool = false) -> Target {
         Target(
             name: name,
             platform: .iOS,
@@ -11,18 +11,8 @@ extension Target {
             productName: name,
             bundleId: "com.swiftbuddies.\(name.lowercased())",
             sources: ["Targets/SwiftBuddies\(name)/Sources/**"],
+            resources: hasResources ? ["Targets/SwiftBuddies\(name)/Resources/**"] : [],
             dependencies: dependencies
-        //    resources: [],
-        //    copyFiles: <#T##[CopyFilesAction]?#>,
-        //    headers: <#T##Headers?#>,
-        //    entitlements: <#T##Path?#>,
-        //    scripts: <#T##[TargetScript]#>,
-        //    settings: <#T##Settings?#>,
-        //    coreDataModels: <#T##[CoreDataModel]#>,
-        //    environment: <#T##[String : String]#>,
-        //    launchArguments: <#T##[LaunchArgument]#>,
-        //    additionalFiles: <#T##[FileElement]#>,
-        //    buildRules: <#T##[BuildRule]#>
         )
     }
 }
@@ -40,12 +30,28 @@ let localHelper = LocalHelper(name: "MyPlugin")
 
 let networkDependency = TargetDependency.makeExternalTarget(name: "DefaultNetworkOperationPackage")
 let swiftUIXDependency = TargetDependency.makeExternalTarget(name: "SwiftUIX")
-let designTarget = Target.makeTarget(name: "Design", dependencies: [swiftUIXDependency])
+let designTarget = Target.makeModule(
+    name: "Design",
+    dependencies: [swiftUIXDependency],
+    hasResources: true
+)
 
-let contributorsModule = Target.makeTarget(name: "Contributors", dependencies: [.target(designTarget), networkDependency])
-let mapModule = Target.makeTarget(name: "Map", dependencies: [.target(designTarget), networkDependency])
-let aboutModule = Target.makeTarget(name: "About", dependencies: [.target(designTarget), networkDependency])
-let feedModule = Target.makeTarget(name: "Feed", dependencies: [.target(designTarget), networkDependency])
+let contributorsModule = Target.makeModule(
+    name: "Contributors",
+    dependencies: [.target(designTarget), networkDependency]
+)
+let mapModule = Target.makeModule(
+    name: "Map",
+    dependencies: [.target(designTarget), networkDependency]
+)
+let aboutModule = Target.makeModule(
+    name: "About",
+    dependencies: [.target(designTarget), networkDependency]
+)
+let feedModule = Target.makeModule(
+    name: "Feed",
+    dependencies: [.target(designTarget), networkDependency]
+)
 
 
 // Creates our project using a helper function defined in ProjectDescriptionHelpers
