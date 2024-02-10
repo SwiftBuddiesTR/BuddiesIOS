@@ -1,4 +1,7 @@
 <a name="readme-top"></a>
+
+[First time here?](#project-details)
+
 # Buddies Community iOS App 
 
 Welcome to the official iOS app for the Buddies Community! This project is a community-driven app built in SwiftUI & Tuist, it aims to serve the members of our vast community, from newcomers to seasoned professionals, providing networking opportunities, collaboration, and professional development.
@@ -28,11 +31,23 @@ Welcome to the official iOS app for the Buddies Community! This project is a com
   </p>
 </div>
 
+# Table of Contents
+1. [Getting Started](#getting-started)
+2. [Installation](#installation)
+3. [Features](#Features)
+4. [Roadmap](#Roadmap)
+5. [Contributing](#Contributing)
+6. [CommunityLinks](#CommunityLinks)
+7. [Contact](#Contact)
+
+<a name="installation"></a> 
+
 ### Built With
 
 * SwiftUI
 * Tuist
 
+<a name="getting-started"></a> 
 ## Getting Started
 
 ### Prerequisites
@@ -41,6 +56,7 @@ Welcome to the official iOS app for the Buddies Community! This project is a com
 * Xcode 15+
 * Tuist 4+
 
+<a name="installation"></a> 
 ### Installation
 
 1. Clone the repo
@@ -50,6 +66,7 @@ Welcome to the official iOS app for the Buddies Community! This project is a com
 3. Generate your project
    `tuist generate`
 
+<a name="Features"></a> 
 ## Features
 
 Currently, the app contains four main tabs:
@@ -59,10 +76,12 @@ Currently, the app contains four main tabs:
 - About: A detailed section providing in-depth insight into our community.
 - Contributors: A nod to individuals who've contributed selflessly to the project, serving as a portfolio showcase.
 
+<a name="Roadmap"></a> 
 ## Roadmap
 
 While the app is in its early stages, future improvements and enhancements are planned. We also encourage community members to propose new features via pull requests.
 
+<a name="Contributing"></a> 
 ## Contributing
 
 We appreciate contributions, big or small. Juniors can learn by developing features and seniors can provide feedback and guidance, keeping the development process streamlined.
@@ -73,12 +92,14 @@ We appreciate contributions, big or small. Juniors can learn by developing featu
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a pull request
 
+<a name="CommunityLinks"></a> 
 ## Community Links
 
 * [Telegram](https://t.me/swiftbuddies)
 * [LinkedIn Group](https://lnkd.in/dm2N_VQs)
 * [Kommunity](https://kommunity.com/swiftbuddies)
 
+<a name="Contact"></a> 
 ## Contact
 You can contribute to the project by reaching out via our Telegram group, let us know about the issues or your suggestions.
 
@@ -107,6 +128,21 @@ A big thank you to all community members for their continuous support and contri
 
 Remember, this is an Open-Source project. We look forward to your contribution, let's come together to make this app a more valuable tool for everyone in our community!
 
+
+<a name="project-details"></a> 
+## Project details
+
+If you're landing here for the first time, welcome to the Buddies Community iOS application project! This app, built with SwiftUI & Tuist, is the result of a collective effort driven by our community, comprising newcomers as well as seasoned professionals in iOS development.
+
+Buddies Community, being a platform dedicated to iOS development, aims to provide a productive environment fostering networking, collaboration, and knowledge sharing. Here, every member has an opportunity to contribute to the project, learn from the best, and get their hands dirty with real-world project experience. Our aim is to make this experience as enriching as possible, thereby helping members grow professionally and become better, more informed developers.
+
+It’s a space where you can share new ideas, discuss designs, learn architectural patterns, get feedback, and much more. And all of this around a practical project that continues to evolve, just like the tech industry itself.
+
+The iOS app offers features such as feed sharing, location suggestions, a comprehensive about section, and a contributors pane acknowledging those who've participated in developing this app. It's not just another pet project, but an application that is enriched with every contribution, making its value significantly higher than a solo endeavor.
+
+We invite you to explore this repository, install the app, and most importantly, contribute in whatever way you can. If you're skilled in Scala or Tuist, great! If you're not, great! We value all contributions and believe that everyone has something valuable to share.
+
+So dive in, explore, learn and share. We're excited to have you here and can't wait to see what you'll bring to the table. Welcome aboard!
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
