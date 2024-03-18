@@ -4,9 +4,9 @@ import MyPlugin
 
 extension Target {
     static func makeModule(name: String, dependencies: [TargetDependency] = [], hasResources: Bool = false) -> Target {
-        Target(
+        Target.target(
             name: name,
-            platform: .iOS,
+            destinations: .iOS,
             product: .framework,
             productName: name,
             bundleId: "com.swiftbuddies.\(name.lowercased())",
@@ -57,7 +57,7 @@ let feedModule = Target.makeModule(
 // Creates our project using a helper function defined in ProjectDescriptionHelpers
 let project = Project.app(
     name: "SwiftBuddiesMain",
-    platform: .iOS,
+    destionations: .iOS,
     additionalTargets: [
         feedModule,
         mapModule,

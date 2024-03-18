@@ -9,14 +9,14 @@ extension Project {
     /// Helper function to create the Project for this ExampleApp
     public static func app(
         name: String,
-        platform: Platform,
+        destionations: Destinations,
         additionalTargets: [Target],
         targetDependencies: [TargetDependency]? = nil
     ) -> Project {
         var targetDependencies = targetDependencies ?? []
         targetDependencies.append(contentsOf: additionalTargets.compactMap({ TargetDependency.target(name: $0.name) }))
         var targets = makeAppTargets(name: name,
-                                     platform: platform,
+                                     destionations: destionations,
                                      dependencies: targetDependencies)
         
         
@@ -29,17 +29,16 @@ extension Project {
     // MARK: - Private
 
     /// Helper function to create the application target and the unit test target.
-    private static func makeAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
-        let platform: Platform = platform
+    private static func makeAppTargets(name: String, destionations: Destinations, dependencies: [TargetDependency]) -> [Target] {
         let infoPlist: [String: Plist.Value] = [
             "CFBundleShortVersionString": "1.0",
             "CFBundleVersion": "1",
             "UIMainStoryboardFile": "",
             "UILaunchStoryboardName": "LaunchScreen"
             ]
-        let mainTarget = Target(
-            name: name,
-            platform: platform,
+        let mainTarget = Target.target(
+            name: name, 
+            destinations: destionations,
             product: .app,
             bundleId: "com.swiftbuddies.\(name.lowercased())",
             infoPlist: .extendingDefault(with: infoPlist),
@@ -48,9 +47,9 @@ extension Project {
             dependencies: dependencies
         )
 
-        let testTarget = Target(
+        let testTarget = Target.target(
             name: "\(name)Tests",
-            platform: platform,
+            destinations: destionations,
             product: .unitTests,
             bundleId: "com.swiftbuddies.\(name.lowercased())Tests",
             infoPlist: .default,
