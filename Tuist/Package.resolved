@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "defaultnetworkoperationpackage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/darkbringer1/DefaultNetworkOperationPackage",
+      "state" : {
+        "revision" : "b7e20d27362595726aeea298b6b4bd6f3734f480",
+        "version" : "1.3.0"
+      }
+    },
+    {
+      "identity" : "swiftuix",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftUIX/SwiftUIX.git",
+      "state" : {
+        "revision" : "a5a22a1aaca885c229f475af049d75a6d9144de8",
+        "version" : "0.1.9"
+      }
+    }
+  ],
+  "version" : 2
+}

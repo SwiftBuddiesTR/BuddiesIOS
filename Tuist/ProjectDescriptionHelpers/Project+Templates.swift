@@ -10,26 +10,28 @@ extension Project {
     public static func app(
         name: String,
         destionations: Destinations,
-        additionalTargets: [Target],
-        targetDependencies: [TargetDependency]? = nil
+        targets: [Target],
+        packages: [Package]
     ) -> Project {
-        var targetDependencies = targetDependencies ?? []
-        targetDependencies.append(contentsOf: additionalTargets.compactMap({ TargetDependency.target(name: $0.name) }))
-        var targets = makeAppTargets(name: name,
-                                     destionations: destionations,
-                                     dependencies: targetDependencies)
         
+        ////        targetDependencies.append(contentsOf: additionalTargets.compactMap({ TargetDependency.target(name: $0.name) }))
+        var appTarget = makeAppTargets(name: name,
+                                       destionations: destionations,
+                                       dependencies: targets)
         
-        targets += additionalTargets
+        var targets = targets
+        targets.append(appTarget)
+        
         return Project(name: name,
                        organizationName: "SwiftBuddies",
+                       packages: packages,
                        targets: targets)
     }
 
     // MARK: - Private
 
     /// Helper function to create the application target and the unit test target.
-    private static func makeAppTargets(name: String, destionations: Destinations, dependencies: [TargetDependency]) -> [Target] {
+    private static func makeAppTargets(name: String, destionations: Destinations, dependencies: [Target]) -> Target {
         let infoPlist: [String: Plist.Value] = [
             "CFBundleShortVersionString": "1.0",
             "CFBundleVersion": "1",
@@ -44,7 +46,7 @@ extension Project {
             infoPlist: .extendingDefault(with: infoPlist),
             sources: ["Targets/\(name)/Sources/**"],
 //            resources: ["Targets/\(name)/Resources/**"],
-            dependencies: dependencies
+            dependencies: dependencies.compactMap { TargetDependency.target(name: $0.name) }
         )
 
         let testTarget = Target.target(
@@ -57,6 +59,6 @@ extension Project {
             dependencies: [
                 .target(name: "\(name)")
         ])
-        return [mainTarget]
+        return mainTarget
     }
 }
