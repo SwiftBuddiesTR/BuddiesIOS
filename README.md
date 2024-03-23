@@ -39,6 +39,7 @@ Welcome to the official iOS app for the Buddies Community! This project is a com
 5. [Contributing](#Contributing)
 6. [CommunityLinks](#CommunityLinks)
 7. [Contact](#Contact)
+   
 
 <a name="installation"></a> 
 
@@ -143,6 +144,11 @@ The iOS app offers features such as feed sharing, location suggestions, a compre
 We invite you to explore this repository, install the app, and most importantly, contribute in whatever way you can. If you're skilled in Scala or Tuist, great! If you're not, great! We value all contributions and believe that everyone has something valuable to share.
 
 So dive in, explore, learn and share. We're excited to have you here and can't wait to see what you'll bring to the table. Welcome aboard!
+
+<a name="future-plans"></a> 
+## Future plans
+blabla
+
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
