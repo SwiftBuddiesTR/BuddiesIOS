@@ -10,12 +10,11 @@ extension Project {
     public static func app(
         name: String,
         destionations: Destinations,
-        targets: [Target],
-        packages: [Package]
+        targets: [Target]
     ) -> Project {
         
         ////        targetDependencies.append(contentsOf: additionalTargets.compactMap({ TargetDependency.target(name: $0.name) }))
-        var appTarget = makeAppTargets(name: name,
+        var appTarget = makeAppTarget(name: name,
                                        destionations: destionations,
                                        dependencies: targets)
         
@@ -24,14 +23,13 @@ extension Project {
         
         return Project(name: name,
                        organizationName: "SwiftBuddies",
-                       packages: packages,
                        targets: targets)
     }
 
     // MARK: - Private
 
     /// Helper function to create the application target and the unit test target.
-    private static func makeAppTargets(name: String, destionations: Destinations, dependencies: [Target]) -> Target {
+    private static func makeAppTarget(name: String, destionations: Destinations, dependencies: [Target]) -> Target {
         let infoPlist: [String: Plist.Value] = [
             "CFBundleShortVersionString": "1.0",
             "CFBundleVersion": "1",
@@ -49,16 +47,16 @@ extension Project {
             dependencies: dependencies.compactMap { TargetDependency.target(name: $0.name) }
         )
 
-        let testTarget = Target.target(
-            name: "\(name)Tests",
-            destinations: destionations,
-            product: .unitTests,
-            bundleId: "com.swiftbuddies.\(name.lowercased())Tests",
-            infoPlist: .default,
-            sources: ["Targets/\(name)/Tests/**"],
-            dependencies: [
-                .target(name: "\(name)")
-        ])
+//        let testTarget = Target.target(
+//            name: "\(name)Tests",
+//            destinations: destionations,
+//            product: .unitTests,
+//            bundleId: "com.swiftbuddies.\(name.lowercased())Tests",
+//            infoPlist: .default,
+//            sources: ["Targets/\(name)/Tests/**"],
+//            dependencies: [
+//                .target(name: "\(name)")
+//        ])
         return mainTarget
     }
 }

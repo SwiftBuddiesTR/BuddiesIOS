@@ -12,7 +12,7 @@ extension Target {
         Target.target(
             name: name,
             destinations: .iOS,
-            product: .dynamicLibrary,
+            product: .staticFramework,
             productName: name,
             bundleId: "com.swiftbuddies.\(name.lowercased())",
             sources: ["Targets/SwiftBuddies\(name)/Sources/**"],
@@ -20,19 +20,30 @@ extension Target {
             dependencies: dependencies
         )
     }
+    
+//    static func makeModule(
+//        name: String,
+//        dependencies: [TargetDependency] = [],
+//        hasResources: Bool = false
+//    ) -> Target {
+//        
+//        Target.target(
+//            name: name,
+//            destinations: .iOS,
+//            product: .dynamicLibrary,
+//            productName: name,
+//            bundleId: "com.swiftbuddies.\(name.lowercased())",
+//            sources: ["Targets/SwiftBuddies\(name)/Sources/**"],
+//            resources: hasResources ? ["Targets/SwiftBuddies\(name)/Resources/**"] : [],
+//            dependencies: dependencies
+//        )
+//    }
 }
-
-// URL: Version
-// -> TargetDependency.package(name)
-// -> Package(url, version
-
 
 extension TargetDependency {
     static func makeExternalTarget(name: String) -> TargetDependency {
         TargetDependency.external(name: name, condition: nil)
     }
-    
-    
 }
 
 struct ThirdParty {
@@ -49,7 +60,7 @@ extension ThirdParty {
     )
     
     func toTargetDependency() -> TargetDependency {
-        .package(product: self.name, type: .runtime, condition: nil)
+        .external(name: self.name, condition: PlatformCondition.when(.all))
     }
     
     func toPackage() -> Package {
@@ -82,7 +93,6 @@ let designTarget = Target.makeModule(
     dependencies: [],
     hasResources: true
 )
-
 let contributorsModule = Target.makeModule(
     name: "Contributors",
     dependencies: [.target(designTarget)]
@@ -97,7 +107,13 @@ let aboutModule = Target.makeModule(
 )
 let feedModule = Target.makeModule(
     name: "Feed",
-    dependencies: [.target(designTarget), .package(.network)]
+    dependencies: [
+        .target(designTarget),
+        .external(
+            name: "DefaultNetworkOperationPackage",
+            condition: nil
+        )
+    ]
 )
 
 
@@ -111,8 +127,5 @@ let project = Project.app(
         aboutModule,
         contributorsModule,
         designTarget
-    ],
-    packages: [.remote(.network)]
+    ]
 )
-
-
