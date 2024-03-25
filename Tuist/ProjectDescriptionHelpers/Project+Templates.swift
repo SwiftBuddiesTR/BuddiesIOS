@@ -9,18 +9,18 @@ extension Project {
     /// Helper function to create the Project for this ExampleApp
     public static func app(
         name: String,
-        platform: Platform,
-        additionalTargets: [Target],
-        targetDependencies: [TargetDependency]? = nil
+        destionations: Destinations,
+        targets: [Target]
     ) -> Project {
-        var targetDependencies = targetDependencies ?? []
-        targetDependencies.append(contentsOf: additionalTargets.compactMap({ TargetDependency.target(name: $0.name) }))
-        var targets = makeAppTargets(name: name,
-                                     platform: platform,
-                                     dependencies: targetDependencies)
         
+        ////        targetDependencies.append(contentsOf: additionalTargets.compactMap({ TargetDependency.target(name: $0.name) }))
+        var appTarget = makeAppTarget(name: name,
+                                       destionations: destionations,
+                                       dependencies: targets)
         
-        targets += additionalTargets
+        var targets = targets
+        targets.append(appTarget)
+        
         return Project(name: name,
                        organizationName: "SwiftBuddies",
                        targets: targets)
@@ -29,35 +29,34 @@ extension Project {
     // MARK: - Private
 
     /// Helper function to create the application target and the unit test target.
-    private static func makeAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
-        let platform: Platform = platform
+    private static func makeAppTarget(name: String, destionations: Destinations, dependencies: [Target]) -> Target {
         let infoPlist: [String: Plist.Value] = [
             "CFBundleShortVersionString": "1.0",
             "CFBundleVersion": "1",
             "UIMainStoryboardFile": "",
             "UILaunchStoryboardName": "LaunchScreen"
             ]
-        let mainTarget = Target(
-            name: name,
-            platform: platform,
+        let mainTarget = Target.target(
+            name: name, 
+            destinations: destionations,
             product: .app,
             bundleId: "com.swiftbuddies.\(name.lowercased())",
             infoPlist: .extendingDefault(with: infoPlist),
             sources: ["Targets/\(name)/Sources/**"],
 //            resources: ["Targets/\(name)/Resources/**"],
-            dependencies: dependencies
+            dependencies: dependencies.compactMap { TargetDependency.target(name: $0.name) }
         )
 
-        let testTarget = Target(
-            name: "\(name)Tests",
-            platform: platform,
-            product: .unitTests,
-            bundleId: "com.swiftbuddies.\(name.lowercased())Tests",
-            infoPlist: .default,
-            sources: ["Targets/\(name)/Tests/**"],
-            dependencies: [
-                .target(name: "\(name)")
-        ])
-        return [mainTarget]
+//        let testTarget = Target.target(
+//            name: "\(name)Tests",
+//            destinations: destionations,
+//            product: .unitTests,
+//            bundleId: "com.swiftbuddies.\(name.lowercased())Tests",
+//            infoPlist: .default,
+//            sources: ["Targets/\(name)/Tests/**"],
+//            dependencies: [
+//                .target(name: "\(name)")
+//        ])
+        return mainTarget
     }
 }
