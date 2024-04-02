@@ -12,7 +12,7 @@ extension Target {
         Target.target(
             name: name,
             destinations: .iOS,
-            product: .staticFramework,
+            product: .dynamicLibrary,
             productName: name,
             bundleId: "com.swiftbuddies.\(name.lowercased())",
             sources: ["Targets/SwiftBuddies\(name)/Sources/**"],
@@ -57,6 +57,11 @@ extension ThirdParty {
         name: "DefaultNetworkOperationPackage",
         url: "https://github.com/darkbringer1/DefaultNetworkOperationPackage",
         version: "1.0.0"
+    )
+    static let firebase: ThirdParty = .init(
+        name: "Firebase",
+        url: "https://github.com/firebase/firebase-ios-sdk.git",
+        version: "10.0.0"
     )
     
     func toTargetDependency() -> TargetDependency {
@@ -109,28 +114,15 @@ let feedModule = Target.makeModule(
     name: "Feed",
     dependencies: [
         .target(designTarget),
-        .external(
-            name: "DefaultNetworkOperationPackage",
-            condition: nil
-        )
+        .package(product: "DefaultNetworkOperationPackage", type: .runtime, condition: nil)
     ]
 )
 let loginModule = Target.makeModule(
     name: "Login",
     dependencies: [
         .target(designTarget),
-        .external(
-            name: "DefaultNetworkOperationPackage",
-            condition: nil
-        ),
-        .external(
-            name: "FirebaseAuthCombine-Community",
-            condition: nil
-        ),
-        .external(
-            name: "FirebaseAuth",
-            condition: nil
-        )
+        .package(product: "DefaultNetworkOperationPackage", type: .runtime, condition: nil),
+        .package(product: "FirebaseAuth", type: .runtime, condition: nil)
     ]
 )
 
@@ -146,5 +138,9 @@ let project = Project.app(
         contributorsModule,
         designTarget,
         loginModule
+    ], 
+    packages: [
+        ThirdParty.network.toPackage(),
+        ThirdParty.firebase.toPackage()
     ]
 )

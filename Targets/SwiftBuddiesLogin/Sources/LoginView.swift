@@ -14,10 +14,7 @@ public struct LoginView: View {
     public init() {}
     
     public var body: some View {
-        Text("Hello, World!")
-            .onAppear(perform: {
-                debugPrint(Auth.auth().currentUser != nil)
-            })
+        Text("Login page")
     }
 }
 

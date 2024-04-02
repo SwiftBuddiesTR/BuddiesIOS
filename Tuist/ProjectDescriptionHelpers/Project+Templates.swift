@@ -10,20 +10,23 @@ extension Project {
     public static func app(
         name: String,
         destionations: Destinations,
-        targets: [Target]
+        targets: [Target],
+        packages: [Package]
     ) -> Project {
         
         ////        targetDependencies.append(contentsOf: additionalTargets.compactMap({ TargetDependency.target(name: $0.name) }))
-        var appTarget = makeAppTarget(name: name,
-                                       destionations: destionations,
-                                       dependencies: targets)
+        let appTarget = makeAppTarget(name: name,
+                                      destionations: destionations,
+                                      dependencies: targets)
         
         var targets = targets
         targets.append(appTarget)
         
         return Project(name: name,
                        organizationName: "SwiftBuddies",
-                       targets: targets)
+                       packages: packages,
+                       targets: targets
+        )
     }
 
     // MARK: - Private
@@ -36,6 +39,7 @@ extension Project {
             "UIMainStoryboardFile": "",
             "UILaunchStoryboardName": "LaunchScreen"
             ]
+        
         let mainTarget = Target.target(
             name: name, 
             destinations: destionations,
@@ -43,7 +47,8 @@ extension Project {
             bundleId: "com.swiftbuddies.\(name.lowercased())",
             infoPlist: .extendingDefault(with: infoPlist),
             sources: ["Targets/\(name)/Sources/**"],
-//            resources: ["Targets/\(name)/Resources/**"],
+            resources: ["Resources/**"],
+//            scripts: targetScripts, 
             dependencies: dependencies.compactMap { TargetDependency.target(name: $0.name) }
         )
 
@@ -59,4 +64,10 @@ extension Project {
 //        ])
         return mainTarget
     }
+    
+    static let targetScripts = [
+          TargetScript.pre(path: "./Scripts/FBCrashlyticsRunScript.sh",
+                           name: "Firebase Crashlytics")
+    ]
+
 }
