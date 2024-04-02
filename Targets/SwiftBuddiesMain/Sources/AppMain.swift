@@ -3,12 +3,14 @@ import Feed
 import Map
 import About
 import Contributors
+import Login
 
 enum AppTab: Int, Identifiable {
     case feed = 0
     case map
     case about
     case contributors
+    case login
     
     var id: Int { rawValue }
 }
@@ -22,6 +24,13 @@ struct AppMain: App {
     var body: some Scene {
         WindowGroup {
             TabView(selection: $selectedTab) {
+                LoginView()
+                    .tabItem {
+                        Image(systemName: "person")
+                        Text("Login")
+                    }
+                    .tag(AppTab.login)
+                
                 FeedView()
                     .tabItem {
                         Image(systemName: "list.bullet")

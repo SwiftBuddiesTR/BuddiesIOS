@@ -115,6 +115,24 @@ let feedModule = Target.makeModule(
         )
     ]
 )
+let loginModule = Target.makeModule(
+    name: "Login",
+    dependencies: [
+        .target(designTarget),
+        .external(
+            name: "DefaultNetworkOperationPackage",
+            condition: nil
+        ),
+        .external(
+            name: "FirebaseAuthCombine-Community",
+            condition: nil
+        ),
+        .external(
+            name: "FirebaseAuth",
+            condition: nil
+        )
+    ]
+)
 
 
 // Creates our project using a helper function defined in ProjectDescriptionHelpers
@@ -126,6 +144,7 @@ let project = Project.app(
         mapModule,
         aboutModule,
         contributorsModule,
-        designTarget
+        designTarget,
+        loginModule
     ]
 )
