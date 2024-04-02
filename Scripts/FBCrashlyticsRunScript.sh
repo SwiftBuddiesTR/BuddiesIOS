@@ -1,0 +1,2 @@
+"DEBUG_INFORMATION_FORMAT": "dwarf-with-dsym"
+"OTHER_LDFLAGS": "-ObjC"
