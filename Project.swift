@@ -12,7 +12,7 @@ extension Target {
         Target.target(
             name: name,
             destinations: .iOS,
-            product: .dynamicLibrary,
+            product: .staticLibrary,
             productName: name,
             bundleId: "com.swiftbuddies.\(name.lowercased())",
             sources: ["Targets/SwiftBuddies\(name)/Sources/**"],
@@ -139,8 +139,6 @@ let project = Project.app(
         designTarget,
         loginModule
     ], 
-    packages: [
-        ThirdParty.network.toPackage(),
-        ThirdParty.firebase.toPackage()
-    ]
+    packages: [ThirdParty.network.toPackage(),
+               ThirdParty.firebase.toPackage()]
 )

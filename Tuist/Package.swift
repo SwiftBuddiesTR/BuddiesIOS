@@ -8,17 +8,15 @@ import PackageDescription
 //
 //
 //let packageSettings = PackageSettings(
-//    productTypes: [
-//        "DefaultNetworkOperationPackage": .staticLibrary, // default is .staticFramework
-////        "SwiftUIX": .framework
-//    ]
+//    productTypes: [: .dynamicLibrary],
 //)
 //#endif
-
-let package = Package(
-    name: "PackageName",
-    platforms: [.iOS(.v13)], 
-    dependencies: [
-        .package(url: "https://github.com/darkbringer1/DefaultNetworkOperationPackage", from: "1.0.0")
-    ]
-)
+//
+//let package = Package(
+//    name: "PackageName",
+//    platforms: [.iOS(.v15)], 
+//    dependencies: [
+//        .package(url: "https://github.com/darkbringer1/DefaultNetworkOperationPackage", from: "1.0.0"),
+//        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.0.0")
+//    ]
+//)
