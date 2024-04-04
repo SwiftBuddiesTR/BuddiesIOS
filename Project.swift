@@ -117,15 +117,6 @@ let feedModule = Target.makeModule(
         .package(product: "DefaultNetworkOperationPackage", type: .runtime, condition: nil)
     ]
 )
-let loginModule = Target.makeModule(
-    name: "Login",
-    dependencies: [
-        .target(designTarget),
-        .package(product: "DefaultNetworkOperationPackage", type: .runtime, condition: nil),
-        .package(product: "FirebaseAuth", type: .runtime, condition: nil)
-    ]
-)
-
 
 // Creates our project using a helper function defined in ProjectDescriptionHelpers
 let project = Project.app(
@@ -136,8 +127,7 @@ let project = Project.app(
         mapModule,
         aboutModule,
         contributorsModule,
-        designTarget,
-        loginModule
+        designTarget
     ], 
     packages: [ThirdParty.network.toPackage(),
                ThirdParty.firebase.toPackage()]
