@@ -1,134 +1,104 @@
 import ProjectDescription
-import ProjectDescriptionHelpers
-import MyPlugin
+import Foundation
 
 extension Target {
-    static func makeModule(
+    static func featureTarget(
         name: String,
-        dependencies: [TargetDependency] = [],
+        productName: String,
+        dependencies: [TargetDependency],
         hasResources: Bool = false
-    ) -> Target {
-        
-        Target.target(
+    ) -> Self {
+         target(
             name: name,
             destinations: .iOS,
             product: .staticLibrary,
-            productName: name,
-            bundleId: "com.swiftbuddies.\(name.lowercased())",
-            sources: ["Targets/SwiftBuddies\(name)/Sources/**"],
-            resources: hasResources ? ["Targets/SwiftBuddies\(name)/Resources/**"] : [],
-            dependencies: dependencies
-        )
-    }
-    
-//    static func makeModule(
-//        name: String,
-//        dependencies: [TargetDependency] = [],
-//        hasResources: Bool = false
-//    ) -> Target {
-//        
-//        Target.target(
-//            name: name,
-//            destinations: .iOS,
-//            product: .dynamicLibrary,
-//            productName: name,
-//            bundleId: "com.swiftbuddies.\(name.lowercased())",
-//            sources: ["Targets/SwiftBuddies\(name)/Sources/**"],
-//            resources: hasResources ? ["Targets/SwiftBuddies\(name)/Resources/**"] : [],
-//            dependencies: dependencies
-//        )
-//    }
-}
-
-extension TargetDependency {
-    static func makeExternalTarget(name: String) -> TargetDependency {
-        TargetDependency.external(name: name, condition: nil)
+            productName: productName,
+            bundleId: "com.swiftbuddies.\(productName.lowercased())",
+            sources: ["SwiftBuddiesIOS/Targets/\(name)Module/Sources/**"],
+            resources: hasResources ? ["SwiftBuddiesIOS/Targets/\(name)Module/Resources/**"] : [],
+            dependencies: dependencies)
     }
 }
 
-struct ThirdParty {
-    let name: String
-    let url: String
-    let version: Version
-}
-
-extension ThirdParty {
-    static let network: ThirdParty = .init(
-        name: "DefaultNetworkOperationPackage",
-        url: "https://github.com/darkbringer1/DefaultNetworkOperationPackage",
-        version: "1.0.0"
-    )
-    static let firebase: ThirdParty = .init(
-        name: "Firebase",
-        url: "https://github.com/firebase/firebase-ios-sdk.git",
-        version: "10.0.0"
-    )
-    
-    func toTargetDependency() -> TargetDependency {
-        .external(name: self.name, condition: PlatformCondition.when(.all))
-    }
-    
-    func toPackage() -> Package {
-        .remote(url: self.url, requirement: .upToNextMajor(from: self.version))
-    }
-}
-
-extension TargetDependency {
-    static func package(_ thirdParty: ThirdParty) -> Self {
-        thirdParty.toTargetDependency()
-    }
-}
-extension Package {
-    static func remote(_ thirdParty: ThirdParty) -> Self {
-        thirdParty.toPackage()
-    }
-}
-// MARK: - Project
-
-// Local plugin loaded
-let localHelper = LocalHelper(name: "MyPlugin")
-
-//extension Package {
-//    static let network: Package = .package(url: "https://github.com/darkbringer1/DefaultNetworkOperationPackage", from: "1.0.0")
-//}
-
-
-let designTarget = Target.makeModule(
+let designModule = Target.featureTarget(
     name: "Design",
+    productName: "Design",
     dependencies: [],
     hasResources: true
 )
-let contributorsModule = Target.makeModule(
-    name: "Contributors",
-    dependencies: [.target(designTarget)]
-)
-let mapModule = Target.makeModule(
-    name: "Map",
-    dependencies: [.target(designTarget)]
-)
-let aboutModule = Target.makeModule(
-    name: "About",
-    dependencies: [.target(designTarget)]
-)
-let feedModule = Target.makeModule(
+
+
+let feedModule = Target.featureTarget(
     name: "Feed",
-    dependencies: [
-        .target(designTarget),
-        .package(product: "DefaultNetworkOperationPackage", type: .runtime, condition: nil)
-    ]
+    productName: "Feed",
+    dependencies: [.target(designModule)]
 )
 
-// Creates our project using a helper function defined in ProjectDescriptionHelpers
-let project = Project.app(
-    name: "SwiftBuddiesMain",
-    destionations: .iOS,
+let aboutModule = Target.featureTarget(
+    name: "About",
+    productName: "About",
+    dependencies: [.target(designModule)]
+)
+
+let contributorsModule = Target.featureTarget(
+    name: "Contributors",
+    productName: "Contributors",
+    dependencies: [.target(designModule)]
+)
+
+let mapModule = Target.featureTarget(
+    name: "Map",
+    productName: "Map",
+    dependencies: [.target(designModule)]
+)
+
+
+let authModule = Target.featureTarget(
+    name: "Auth",
+    productName: "Auth",
+    dependencies: [.package(product: "GoogleSignIn", type: .runtime, condition: .none)]
+)
+
+
+let project = Project(
+    name: "SwiftBuddiesIOS",
+    packages: [.remote(url: "https://github.com/google/GoogleSignIn-iOS.git", requirement: .exact("7.0.0"))],
     targets: [
+        .target(
+            name: "SwiftBuddiesIOS",
+            destinations: .iOS,
+            product: .app,
+            bundleId: "io.tuist.SwiftBuddiesIOS",
+            infoPlist: .extendingDefault(
+                with: [
+                    "CFBundleShortVersionString": "1.0",
+                    "CFBundleVersion": "1",
+                    "UIMainStoryboardFile": "",
+                    "UILaunchStoryboardName": "LaunchScreen",
+                    "CLIENT_ID": "221417854896-bs0p0kp2qou67t91g9dtal8pbrv4rki8.apps.googleusercontent.com",
+                    "REVERSED_CLIENT_ID": "com.googleusercontent.apps.221417854896-bs0p0kp2qou67t91g9dtal8pbrv4rki8",
+                    "CFBundleURLTypes": [
+                        ["CFBundleURLSchemes": ["com.googleusercontent.apps.221417854896-bs0p0kp2qou67t91g9dtal8pbrv4rki8"]]
+                    ]
+                ]
+            ),
+            sources: ["SwiftBuddiesIOS/Sources/**"],
+            resources: ["SwiftBuddiesIOS/Resources/**"],
+            dependencies: [
+                .package(product: "GoogleSignIn", type: .runtime, condition: .none),
+                .target(authModule),
+                .target(feedModule),
+                .target(designModule),
+                .target(contributorsModule),
+                .target(mapModule),
+                .target(aboutModule)
+            ]
+        ),
+        authModule,
         feedModule,
-        mapModule,
-        aboutModule,
+        designModule,
         contributorsModule,
-        designTarget
-    ], 
-    packages: [ThirdParty.network.toPackage(),
-               ThirdParty.firebase.toPackage()]
+        mapModule,
+        aboutModule
+    ]
 )
