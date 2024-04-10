@@ -6,7 +6,7 @@ extension Target {
         name: String,
         productName: String,
         dependencies: [TargetDependency],
-        resources: ResourceFileElements? = nil
+        hasResources: Bool = false
     ) -> Self {
          target(
             name: name,
@@ -15,23 +15,49 @@ extension Target {
             productName: productName,
             bundleId: "com.swiftbuddies.\(productName.lowercased())",
             sources: ["SwiftBuddiesIOS/Targets/\(name)Module/Sources/**"],
-            resources: resources,
+            resources: hasResources ? ["SwiftBuddiesIOS/Targets/\(name)Module/Resources/**"] : [],
             dependencies: dependencies)
     }
 }
 
+let designModule = Target.featureTarget(
+    name: "Design",
+    productName: "Design",
+    dependencies: [],
+    hasResources: true
+)
+
+
 let feedModule = Target.featureTarget(
     name: "Feed",
     productName: "Feed",
-    dependencies: []
+    dependencies: [.target(designModule)]
 )
+
+let aboutModule = Target.featureTarget(
+    name: "About",
+    productName: "About",
+    dependencies: [.target(designModule)]
+)
+
+let contributorsModule = Target.featureTarget(
+    name: "Contributors",
+    productName: "Contributors",
+    dependencies: [.target(designModule)]
+)
+
+let mapModule = Target.featureTarget(
+    name: "Map",
+    productName: "Map",
+    dependencies: [.target(designModule)]
+)
+
 
 let authModule = Target.featureTarget(
     name: "Auth",
     productName: "Auth",
     dependencies: [.package(product: "GoogleSignIn", type: .runtime, condition: .none)]
 )
-
 
 
 let project = Project(
@@ -61,11 +87,18 @@ let project = Project(
             dependencies: [
                 .package(product: "GoogleSignIn", type: .runtime, condition: .none),
                 .target(authModule),
-                .target(feedModule)
+                .target(feedModule),
+                .target(designModule),
+                .target(contributorsModule),
+                .target(mapModule),
+                .target(aboutModule)
             ]
         ),
         authModule,
-        feedModule
-            
+        feedModule,
+        designModule,
+        contributorsModule,
+        mapModule,
+        aboutModule
     ]
 )

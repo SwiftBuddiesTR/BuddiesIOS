@@ -1,17 +1,33 @@
 import SwiftUI
 import Auth
+import Map
+
 
 public struct ContentView: View {
     public init() {}
 
     public var body: some View {
-        Button(action: {
-            Task { @MainActor in
-                let _ = try? await Authenticator.shared.signIn()
+        TabView {
+            VStack {
+                Button(action: {
+                    Task {
+                        try? await Authenticator.shared.signIn()
+                    }
+                }, label: {
+                    Text("Login")
+                })
             }
-        }, label: {
-            /*@START_MENU_TOKEN@*/Text("Button")/*@END_MENU_TOKEN@*/
-        })
+            .tabItem {
+                Image(systemName: "list.bullet")
+                Text("Feed")
+            }
+            
+            MapView()
+                .tabItem {
+                    Image(systemName: "map")
+                    Text("Map")
+                }
+        }
     }
 }
 
