@@ -10,7 +10,7 @@ import Design
 public struct OnboardingBuilder {
     public static func build() -> OnboardingView {
         
-        var onboardingItems: [OnboardingItemModel] = [
+        let onboardingItems: [OnboardingItemModel] = [
             .init(id: 0,
                   title: "onboardingItem.FirstTitle",
                   description: "onboardingItem.FirstDescription",
