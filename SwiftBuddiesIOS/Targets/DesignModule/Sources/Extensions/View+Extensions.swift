@@ -45,4 +45,11 @@ public extension View {
                 }
         }
     }
+    
+    func fillView(_ color: Color) -> some View {
+        self
+            .padding(.horizontal,15)
+            .padding(.vertical,10)
+            .background { color }
+    }
 }
