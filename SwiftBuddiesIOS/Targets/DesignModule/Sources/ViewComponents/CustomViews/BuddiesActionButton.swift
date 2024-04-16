@@ -18,7 +18,7 @@ public struct BuddiesActionButton: View {
     
     public let title: LocalizedStringKey
     public let bgColor: Color
-    public var iconName: String = ""
+    public var iconName: String
     public let clickAction: () -> Void
     
     public var body: some View {
