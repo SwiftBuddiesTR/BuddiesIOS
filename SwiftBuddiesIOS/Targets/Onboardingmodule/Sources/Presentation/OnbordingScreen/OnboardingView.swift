@@ -9,18 +9,16 @@ import SwiftUI
 import Design
 
 public struct OnboardingView: View {
-    public typealias OnboardingDidSeenCompletion = (() -> Void)?
+    @AppStorage("isSplashScreenViewed") var isOnboardingScreenViewed : Bool = false
     
-    init(items onboardingData:[OnboardingItemModel], didSeenCompletion: OnboardingDidSeenCompletion) {
+    init(items onboardingData:[OnboardingItemModel]) {
         self.onboardingData = onboardingData
-        self.didSeenCompletion = didSeenCompletion
     }
     
     @State private var currentOnboardingItem: Int = 0
     
     private var onboardingData: [OnboardingItemModel]
-    
-    var didSeenCompletion: OnboardingDidSeenCompletion
+
     
     public var body: some View {
         ZStack {
@@ -41,7 +39,8 @@ public struct OnboardingView: View {
                 let buttonTitle: LocalizedStringKey = isLastItem ? "onboarding.StartButtonTitle": "onboarding.ButtonTitle"
                 BuddiesActionButton(title: buttonTitle) {
                     if isLastItem {
-                        didSeenCompletion?()
+                        withAnimation(.easeInOut) { isOnboardingScreenViewed = true }
+                        
                     } else {
                         withAnimation { currentOnboardingItem += 1 }
                     }

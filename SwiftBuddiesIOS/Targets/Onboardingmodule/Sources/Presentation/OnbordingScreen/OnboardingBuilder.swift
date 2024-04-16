@@ -7,9 +7,20 @@
 
 import Design
 
-
 public struct OnboardingBuilder {
-    public static func build(items: [OnboardingItemModel], didSeenOnboarding: OnboardingView.OnboardingDidSeenCompletion = nil) -> OnboardingView {
-        .init(items: items, didSeenCompletion: didSeenOnboarding)
+    public static func build() -> OnboardingView {
+        
+        var onboardingItems: [OnboardingItemModel] = [
+            .init(id: 0,
+                  title: "onboardingItem.FirstTitle",
+                  description: "onboardingItem.FirstDescription",
+                  image: DesignAsset.onboardingWelcomeImage.swiftUIImage),
+            .init(id: 1,
+                  title: "onboardingItem.SecondTitle",
+                  description: "onboardingItem.SecondDescription",
+                  image: DesignAsset.onboardingBuddiesImage.swiftUIImage)
+        ]
+        
+        return OnboardingView(items: onboardingItems)
     }
 }

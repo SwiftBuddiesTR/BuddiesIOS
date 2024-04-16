@@ -5,45 +5,22 @@ import Onboarding
 import Design
 
 public struct ContentView: View {
-    @State var isOnboardingSeen: Bool
+    @AppStorage("isSplashScreenViewed") var isOnboardingScreenViewed : Bool = false
     
-    public init() {
-        isOnboardingSeen = LocalData.manager.isOnboardingScreenViewed
-    }
+    public init() { }
 
     public var body: some View {
         SuitableRootView()
     }
     
-    
     @ViewBuilder
     private func SuitableRootView() -> some View {
-        if isOnboardingSeen {
+        if isOnboardingScreenViewed {
             TabFlow()
         } else {
-            OnboardingBuilder.build(items:prepareOnboardingItems(),
-                                    didSeenOnboarding: onboardingSeenAction)
+            OnboardingBuilder.build()
         }
     }
-    
-    private func prepareOnboardingItems() -> [OnboardingItemModel] {
-        [.init(id: 0,
-               title: "onboardingItem.FirstTitle",
-               description: "onboardingItem.FirstDescription",
-               image: DesignAsset.onboardingWelcomeImage.swiftUIImage),
-         .init(id: 1,
-               title: "onboardingItem.SecondTitle",
-               description: "onboardingItem.SecondDescription",
-               image: DesignAsset.onboardingBuddiesImage.swiftUIImage)
-        ]
-    }
-    
-    private func onboardingSeenAction() {
-        withAnimation(.easeInOut) { isOnboardingSeen = true }
-        LocalData.manager.isOnboardingScreenViewed = isOnboardingSeen
-        
-    }
-    
 }
 
 struct TabFlow: View {
