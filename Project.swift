@@ -59,6 +59,12 @@ let authModule = Target.featureTarget(
     dependencies: [.package(product: "GoogleSignIn", type: .runtime, condition: .none)]
 )
 
+let onboardingModule = Target.featureTarget(
+    name: "Onboarding",
+    productName: "Onboarding",
+    dependencies: [.target(designModule)]
+)
+
 
 let project = Project(
     name: "SwiftBuddiesIOS",
@@ -91,7 +97,8 @@ let project = Project(
                 .target(designModule),
                 .target(contributorsModule),
                 .target(mapModule),
-                .target(aboutModule)
+                .target(aboutModule),
+                .target(onboardingModule)
             ]
         ),
         authModule,
@@ -99,6 +106,7 @@ let project = Project(
         designModule,
         contributorsModule,
         mapModule,
-        aboutModule
+        aboutModule,
+        onboardingModule
     ]
 )
