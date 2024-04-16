@@ -39,7 +39,14 @@ public struct BuddiesActionButton: View {
                     .frame(maxWidth: .infinity, alignment: .center)
             }
             .fillView(bgColor)
-            .cornerRadius(10, corners: .allCorners)
+            .clipShape(
+                .rect(
+                    topLeadingRadius: 10,
+                    bottomLeadingRadius: 10,
+                    bottomTrailingRadius: 10,
+                    topTrailingRadius: 10
+                )   
+            )
         }
         .frame(maxWidth: .infinity)
     }
