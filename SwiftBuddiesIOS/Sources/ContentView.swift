@@ -2,25 +2,35 @@ import SwiftUI
 import Auth
 import Map
 import Feed
+import Onboarding
 import About
 import Contributors
-
-enum AppTab: Int, Identifiable {
-    case feed = 0
-    case map
-    case about
-    case contributors
-//    case login
-    
-    var id: Int { rawValue }
-}
+import Design
 
 public struct ContentView: View {
+    @AppStorage("isSplashScreenViewed") var isOnboardingScreenViewed : Bool = false
+    
+    public init() { }
+
+    public var body: some View {
+        SuitableRootView()
+    }
+    
+    @ViewBuilder
+    private func SuitableRootView() -> some View {
+        if isOnboardingScreenViewed {
+            TabFlow()
+        } else {
+            OnboardingBuilder.build()
+        }
+    }
+}
+
+struct TabFlow: View {
     @State var selectedTab: AppTab = .feed
 
     public init() {}
-
-    public var body: some View {
+    var body: some View {
         TabView(selection: $selectedTab) {
             FeedView()
                 .tabItem {
@@ -49,10 +59,19 @@ public struct ContentView: View {
         }
     }
 }
+            
+
+enum AppTab: Int, Identifiable {
+    case feed = 0
+    case map
+    case about
+    case contributors
+//    case login
+    
+    var id: Int { rawValue }
+}
 
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+#Preview {
+    ContentView()
 }

@@ -45,4 +45,11 @@ public extension View {
                 }
         }
     }
+    
+    func fillView(_ color: Color, horizontolPadding: CGFloat = 15, verticalPadding: CGFloat = 10) -> some View {
+        self
+            .padding(.horizontal,horizontolPadding)
+            .padding(.vertical,verticalPadding)
+            .background { color }
+    }
 }
