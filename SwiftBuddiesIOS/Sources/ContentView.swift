@@ -6,10 +6,12 @@ import Onboarding
 import About
 import Contributors
 import Design
+import Login
 import Localization
 
 public struct ContentView: View {
     @AppStorage("isSplashScreenViewed") var isOnboardingScreenViewed : Bool = false
+    @State private var showSignInView: Bool = false
     
     public init() { }
 
@@ -20,7 +22,21 @@ public struct ContentView: View {
     @ViewBuilder
     private func SuitableRootView() -> some View {
         if isOnboardingScreenViewed {
-            TabFlow()
+            ZStack {
+                if !showSignInView {
+                    TabFlow()
+                }
+            }
+            .onAppear {
+                let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+                self.showSignInView = authUser == nil
+                try? AuthenticationManager.shared.signOut()
+            }
+            .fullScreenCover(isPresented: $showSignInView, content: {
+                NavigationStack {
+                    AuthenticationView(showSignInView: $showSignInView)
+                }
+            })
         } else {
             OnboardingBuilder.build()
         }
@@ -67,7 +83,6 @@ enum AppTab: Int, Identifiable {
     case map
     case about
     case contributors
-//    case login
     
     var id: Int { rawValue }
 }
