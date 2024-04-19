@@ -56,7 +56,10 @@ let mapModule = Target.featureTarget(
 let authModule = Target.featureTarget(
     name: "Auth",
     productName: "Auth",
-    dependencies: [.package(product: "GoogleSignIn", type: .runtime, condition: .none)]
+    dependencies: [
+        .package(product: "GoogleSignIn", type: .runtime, condition: .none),
+        .package(product: "FirebaseAuth", type: .runtime, condition: .none)
+    ]
 )
 
 let onboardingModule = Target.featureTarget(
@@ -65,10 +68,25 @@ let onboardingModule = Target.featureTarget(
     dependencies: [.target(designModule)]
 )
 
+let loginModule = Target.featureTarget(
+    name: "Login",
+    productName: "Login",
+    dependencies: [
+        .target(designModule),
+        .target(authModule),
+        .package(product: "GoogleSignIn", type: .runtime, condition: .none),
+        .package(product: "GoogleSignInSwift", type: .runtime, condition: .none),
+        .package(product: "FirebaseAuth", type: .runtime, condition: .none)
+    ]
+)
+
 
 let project = Project(
     name: "SwiftBuddiesIOS",
-    packages: [.remote(url: "https://github.com/google/GoogleSignIn-iOS.git", requirement: .exact("7.0.0"))],
+    packages: [
+        .remote(url: "https://github.com/google/GoogleSignIn-iOS.git", requirement: .exact("7.0.0")),
+        .remote(url: "https://github.com/firebase/firebase-ios-sdk.git", requirement: .exact("10.24.0"))
+    ],
     targets: [
         .target(
             name: "SwiftBuddiesIOS",
@@ -81,10 +99,10 @@ let project = Project(
                     "CFBundleVersion": "1",
                     "UIMainStoryboardFile": "",
                     "UILaunchStoryboardName": "LaunchScreen",
-                    "CLIENT_ID": "221417854896-bs0p0kp2qou67t91g9dtal8pbrv4rki8.apps.googleusercontent.com",
-                    "REVERSED_CLIENT_ID": "com.googleusercontent.apps.221417854896-bs0p0kp2qou67t91g9dtal8pbrv4rki8",
+                    "CLIENT_ID": "1015261010783-dq3s025o2j6pcj81ped6nqpbiv5m1fvr.apps.googleusercontent.com",
+                    "REVERSED_CLIENT_ID": "com.googleusercontent.apps.1015261010783-dq3s025o2j6pcj81ped6nqpbiv5m1fvr",
                     "CFBundleURLTypes": [
-                        ["CFBundleURLSchemes": ["com.googleusercontent.apps.221417854896-bs0p0kp2qou67t91g9dtal8pbrv4rki8"]]
+                        ["CFBundleURLSchemes": ["com.googleusercontent.apps.1015261010783-dq3s025o2j6pcj81ped6nqpbiv5m1fvr"]]
                     ]
                 ]
             ),
@@ -92,13 +110,15 @@ let project = Project(
             resources: ["SwiftBuddiesIOS/Resources/**"],
             dependencies: [
                 .package(product: "GoogleSignIn", type: .runtime, condition: .none),
+                .package(product: "FirebaseAuth", type: .runtime, condition: .none),
                 .target(authModule),
                 .target(feedModule),
                 .target(designModule),
                 .target(contributorsModule),
                 .target(mapModule),
                 .target(aboutModule),
-                .target(onboardingModule)
+                .target(onboardingModule),
+                .target(loginModule)
             ]
         ),
         authModule,
@@ -107,6 +127,7 @@ let project = Project(
         contributorsModule,
         mapModule,
         aboutModule,
-        onboardingModule
+        onboardingModule,
+        loginModule
     ]
 )
