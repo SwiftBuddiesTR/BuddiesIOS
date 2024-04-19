@@ -53,3 +53,10 @@ public extension View {
             .background { color }
     }
 }
+
+public extension View {
+
+    func withLoginButtonFormatting() -> some View {
+        modifier(LoginButtonViewModifier())
+    }
+}
