@@ -6,8 +6,6 @@
 //
 
 import SwiftUI
-import GoogleSignIn
-import GoogleSignInSwift
 import Design
 import Auth
 
