@@ -75,7 +75,6 @@ let loginModule = Target.featureTarget(
         .target(designModule),
         .target(authModule),
         .package(product: "GoogleSignIn", type: .runtime, condition: .none),
-        .package(product: "GoogleSignInSwift", type: .runtime, condition: .none),
         .package(product: "FirebaseAuth", type: .runtime, condition: .none)
     ]
 )
