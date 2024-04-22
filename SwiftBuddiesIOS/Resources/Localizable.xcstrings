@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "About" : {
-
-    },
     "Contributors" : {
 
     },
@@ -78,6 +75,9 @@
           }
         }
       }
+    },
+    "Profile" : {
+
     }
   },
   "version" : "1.0"
