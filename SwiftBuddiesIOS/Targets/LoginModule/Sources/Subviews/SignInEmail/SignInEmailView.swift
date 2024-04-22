@@ -67,7 +67,7 @@ extension SignInEmailView {
             }
             .focused($fieldInFocus, equals: .email)
             .withLoginTextFieldFormatting(
-                backgroundColor: viewModel.email.isEmpty ?
+                borderColor: viewModel.email.isEmpty ?
                 Color.primary.opacity(0.7) : DesignAsset.loginStrokeColor.swiftUIColor
             )
     }
@@ -86,7 +86,7 @@ extension SignInEmailView {
         }
         .focused($fieldInFocus, equals: .password)
         .withLoginTextFieldFormatting(
-            backgroundColor: viewModel.email.isEmpty ? 
+            borderColor: viewModel.password.isEmpty ?
             Color.primary.opacity(0.7) : DesignAsset.loginStrokeColor.swiftUIColor
         )
     }
