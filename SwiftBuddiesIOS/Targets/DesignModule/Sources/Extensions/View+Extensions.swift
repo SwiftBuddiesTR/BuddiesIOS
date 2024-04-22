@@ -59,4 +59,8 @@ public extension View {
     func withLoginButtonFormatting() -> some View {
         modifier(LoginButtonViewModifier())
     }
+    
+    func withLoginTextFieldFormatting(backgroundColor: Color) -> some View {
+        modifier(LoginTextFieldModifier(backgroundColor: backgroundColor))
+    }
 }

@@ -27,9 +27,12 @@ public struct AuthenticationView: View {
                 
                 dividerView
                 
-                anonymousSignInButton
-                googleSignInButton
-                appleSignInButton
+                Group {
+                    anonymousSignInButton
+                    googleSignInButton
+                    appleSignInButton
+                }
+                .clipShape(Capsule())
                 
                 Spacer()
             }
@@ -64,12 +67,7 @@ extension AuthenticationView {
             }
         } label: {
             Text("Sign In Anonymously")
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(height: 55)
-                .frame(maxWidth: .infinity)
-                .background(DesignAsset.loginStrokeColor.swiftUIColor)
-                .cornerRadius(10)
+                .withLoginButtonFormatting()
         }
     }
     
@@ -85,12 +83,7 @@ extension AuthenticationView {
             }
         } label: {
             Text("Sign In With Google")
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(height: 55)
-                .frame(maxWidth: .infinity)
-                .background(DesignAsset.loginStrokeColor.swiftUIColor)
-                .cornerRadius(10)
+                .withLoginButtonFormatting()
         }
     }
     
@@ -107,13 +100,11 @@ extension AuthenticationView {
         }, label: {
             SignInWithAppleButtonViewRepresentable(type: .default, style: .black)
                 .allowsHitTesting(false)
+                .withLoginButtonFormatting()
         })
-        .frame(height: 55)
     }
 }
 
 #Preview {
-    NavigationStack {
-        AuthenticationView(showSignInView: .constant(true))
-    }
+    AuthenticationView(showSignInView: .constant(true))
 }

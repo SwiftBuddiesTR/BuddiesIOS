@@ -10,9 +10,27 @@ import SwiftUI
 struct LoginButtonViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
+            .font(.headline)
             .foregroundColor(.white)
-            .fontWeight(.bold)
-            .padding(.vertical)
+            .frame(height: 55)
             .frame(maxWidth: .infinity)
+            .background(DesignAsset.loginStrokeColor.swiftUIColor)
+    }
+}
+
+struct LoginTextFieldModifier: ViewModifier {
+    
+    let backgroundColor: Color
+    
+    func body(content: Content) -> some View {
+        content
+            .textInputAutocapitalization(.never)
+            .fontWeight(.bold)
+            .frame(height: 55)
+            .padding(.horizontal)
+            .background(
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(backgroundColor, lineWidth: 2)
+            )
     }
 }
