@@ -1,17 +1,13 @@
 import SwiftUI
 import Design
 
-public struct AboutView: View {
-    
-    public init() { }
-    
-    public var body: some View {
+struct AboutView: View {
+    var body: some View {
         HeaderParallaxView {
             VStack {
                 Image("SwiftBuddiesHeader", bundle: DesignResources.bundle)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                
             }
         } content: {
             VStack(alignment: .leading, spacing: 16) {

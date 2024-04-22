@@ -34,30 +34,6 @@ let designModule = Target.featureTarget(
     hasResources: true
 )
 
-let feedModule = Target.featureTarget(
-    name: "Feed",
-    productName: "Feed",
-    dependencies: [.target(designModule)]
-)
-
-let aboutModule = Target.featureTarget(
-    name: "About",
-    productName: "About",
-    dependencies: [.target(designModule)]
-)
-
-let contributorsModule = Target.featureTarget(
-    name: "Contributors",
-    productName: "Contributors",
-    dependencies: [.target(designModule)]
-)
-
-let mapModule = Target.featureTarget(
-    name: "Map",
-    productName: "Map",
-    dependencies: [.target(designModule)]
-)
-
 let authModule = Target.featureTarget(
     name: "Auth",
     productName: "Auth",
@@ -129,9 +105,38 @@ let loginModule = Target.featureTarget(
     ]
 )
 
+let feedModule = Target.featureTarget(
+    name: "Feed",
+    productName: "Feed",
+    dependencies: [.target(designModule)]
+)
+
+let mapModule = Target.featureTarget(
+    name: "Map",
+    productName: "Map",
+    dependencies: [.target(designModule)]
+)
+
+let profileModule = Target.featureTarget(
+    name: "Profile",
+    productName: "Profile",
+    dependencies: [
+        .target(designModule),
+        .target(authModule),
+        .package(product: "GoogleSignIn", type: .runtime, condition: .none),
+        .package(product: "FirebaseAuth", type: .runtime, condition: .none)
+    ]
+)
+
+let contributorsModule = Target.featureTarget(
+    name: "Contributors",
+    productName: "Contributors",
+    dependencies: [.target(designModule)]
+)
+
 
 let project = Project(
-    name: "SwiftBuddiesIOS",
+    name: "Buddies",
     packages: [
         .remote(url: "https://github.com/google/GoogleSignIn-iOS.git", requirement: .exact("7.0.0")),
         .remote(url: "https://github.com/firebase/firebase-ios-sdk.git", requirement: .exact("10.24.0")),
@@ -161,27 +166,27 @@ let project = Project(
             dependencies: [
                 .package(product: "GoogleSignIn", type: .runtime, condition: .none),
                 .package(product: "FirebaseAuth", type: .runtime, condition: .none),
-                .target(authModule),
-                .target(feedModule),
                 .target(designModule),
-                .target(contributorsModule),
-                .target(mapModule),
-                .target(aboutModule),
+                .target(authModule),
                 .target(onboardingModule),
                 .target(loginModule),
+                .target(feedModule),
+                .target(mapModule),
+                .target(profileModule),
+                .target(contributorsModule),
 //                .target(scriptsModule),
 //                .target(localicationCodegen)
                 .target(localizationModule)
             ]
         ),
-        authModule,
-        feedModule,
         designModule,
-        contributorsModule,
-        mapModule,
-        aboutModule,
+        authModule,
         onboardingModule,
         loginModule,
+        feedModule,
+        mapModule,
+        profileModule,
+        contributorsModule,
 //        scriptsModule,
         localizationModule,
         localicationCodegen

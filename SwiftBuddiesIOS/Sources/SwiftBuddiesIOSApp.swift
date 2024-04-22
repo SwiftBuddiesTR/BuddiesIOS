@@ -8,7 +8,7 @@ struct SwiftBuddiesIOSApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
         }
     }
 }
