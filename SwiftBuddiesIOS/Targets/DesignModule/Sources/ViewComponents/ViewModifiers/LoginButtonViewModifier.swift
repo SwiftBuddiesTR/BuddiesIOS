@@ -20,7 +20,7 @@ struct LoginButtonViewModifier: ViewModifier {
 
 struct LoginTextFieldModifier: ViewModifier {
     
-    let backgroundColor: Color
+    let borderColor: Color
     
     func body(content: Content) -> some View {
         content
@@ -30,7 +30,7 @@ struct LoginTextFieldModifier: ViewModifier {
             .padding(.horizontal)
             .background(
                 RoundedRectangle(cornerRadius: 4)
-                    .stroke(backgroundColor, lineWidth: 2)
+                    .stroke(borderColor, lineWidth: 2)
             )
     }
 }
