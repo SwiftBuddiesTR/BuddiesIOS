@@ -86,10 +86,10 @@ While the app is in its early stages, future improvements and enhancements are p
 
 We appreciate contributions, big or small. Juniors can learn by developing features and seniors can provide feedback and guidance, keeping the development process streamlined.
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+1. Clone the project
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -am 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a pull request
 
 <a name="CommunityLinks"></a> 
