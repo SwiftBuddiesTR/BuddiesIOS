@@ -30,6 +30,8 @@ public struct AuthenticationView: View {
             .padding()
             .frame(maxWidth: 375)
         }
+        .scrollIndicators(.never)
+        .onTapGesture(perform: endTextEditing)
     }
 }
 
