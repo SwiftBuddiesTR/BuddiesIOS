@@ -1,10 +1,3 @@
-//
-//  LoginView.swift
-//  Login
-//
-//  Created by Berkay Tuncel on 17.04.2024.
-//
-
 import SwiftUI
 import Design
 import Auth
