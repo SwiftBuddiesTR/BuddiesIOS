@@ -52,6 +52,10 @@ public extension View {
             .padding(.vertical,verticalPadding)
             .background { color }
     }
+    
+    func endTextEditing() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 }
 
 public extension View {
