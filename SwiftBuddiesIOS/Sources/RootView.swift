@@ -7,6 +7,9 @@ struct RootView: View {
     @AppStorage("isSplashScreenViewed") var isOnboardingScreenViewed : Bool = false
     @State private var showSignInView: Bool = false
     
+    let pub = NotificationCenter.default
+        .publisher(for: .signOutNotification)
+    
     init() { }
 
     var body: some View {
@@ -24,6 +27,9 @@ struct RootView: View {
             .onAppear {
                 let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
                 self.showSignInView = authUser == nil
+            }
+            .onReceive(pub) { _ in
+                showSignInView = true
             }
             .fullScreenCover(isPresented: $showSignInView, content: {
                 AuthenticationView(showSignInView: $showSignInView)

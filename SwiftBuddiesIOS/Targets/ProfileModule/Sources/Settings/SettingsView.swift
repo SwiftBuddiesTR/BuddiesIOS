@@ -1,17 +1,17 @@
 import SwiftUI
+import Design
 
 struct SettingsView: View {
     
     @StateObject private var viewModel = SettingsViewModel()
-    @Binding var showSignInView: Bool
     
     var body: some View {
         List {
-            Button("Log out") {
+            Button("Sign out") {
                 Task {
                     do {
                         try viewModel.signOut()
-                        showSignInView = true
+                        NotificationCenter.default.post(name: .signOutNotification, object: nil)
                     } catch {
                         debugPrint(error)
                     }
@@ -23,5 +23,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView(showSignInView: .constant(false))
+    SettingsView()
 }
