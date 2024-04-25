@@ -39,14 +39,12 @@ struct TabFlowView: View {
                 }
                 .tag(AppTab.map)
             
-            NavigationStack {
-                ProfileView(showSignInView: $showSignInView)
-            }
-            .tabItem {
-                Image(systemName: "person.fill")
-                Text("Profile")
-            }
-            .tag(AppTab.profile)
+            ProfileView()
+                .tabItem {
+                    Image(systemName: "person.fill")
+                    Text("Profile")
+                }
+                .tag(AppTab.profile)
             
             ContributorsView()
                 .tabItem {
