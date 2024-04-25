@@ -1,10 +1,3 @@
-//
-//  SignInGoogleHelper.swift
-//  Auth
-//
-//  Created by Berkay Tuncel on 18.04.2024.
-//
-
 import Foundation
 import GoogleSignIn
 

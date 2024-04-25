@@ -1,10 +1,3 @@
-//
-//  AuthenticationViewModel.swift
-//  Login
-//
-//  Created by Berkay Tuncel on 19.04.2024.
-//
-
 import Foundation
 import Auth
 

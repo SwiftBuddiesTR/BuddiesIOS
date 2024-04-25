@@ -1,10 +1,3 @@
-//
-//  SignInAppleHelper.swift
-//  Auth
-//
-//  Created by Berkay Tuncel on 19.04.2024.
-//
-
 import SwiftUI
 import AuthenticationServices
 import CryptoKit
