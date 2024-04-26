@@ -11,8 +11,8 @@ import SwiftUI
 public struct OnboardingItemModel: Identifiable, Hashable {
     
     public init(id: Int,
-                title: LocalizedStringKey,
-                description: LocalizedStringKey,
+                title: String,
+                description: String,
                 image: Image) {
         self.id = id
         self.title = title
@@ -22,8 +22,8 @@ public struct OnboardingItemModel: Identifiable, Hashable {
     
     
     public var id: Int
-    public var title: LocalizedStringKey
-    public var description: LocalizedStringKey
+    public var title: String
+    public var description: String
     public var image: Image
     
     public func hash(into hasher: inout Hasher) {
