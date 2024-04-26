@@ -9,14 +9,19 @@ import SwiftUI
 
 public struct BuddiesActionButton: View {
     
-    public init(title: LocalizedStringKey, bgColor: Color = .orange, iconName: String = "", clickAction: @escaping () -> Void) {
-        self.title = title
+    public init(
+        label: Text,
+        bgColor: Color = .orange,
+        iconName: String = "",
+        clickAction: @escaping () -> Void
+    ) {
+        self.label = label
         self.bgColor = bgColor
         self.iconName = iconName
         self.clickAction = clickAction
     }
     
-    public let title: LocalizedStringKey
+    public let label: Text
     public let bgColor: Color
     public var iconName: String
     public let clickAction: () -> Void
@@ -32,7 +37,7 @@ public struct BuddiesActionButton: View {
                             .foregroundStyle(.white)
                     } else { EmptyView() }
                 }
-                Text(title)
+                label
                     .font(.body.bold())
                     .foregroundStyle(.white)
                     .frame(height: 40)

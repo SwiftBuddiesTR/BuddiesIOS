@@ -6,6 +6,7 @@ import Onboarding
 import About
 import Contributors
 import Design
+import Localization
 
 public struct ContentView: View {
     @AppStorage("isSplashScreenViewed") var isOnboardingScreenViewed : Bool = false
@@ -35,25 +36,25 @@ struct TabFlow: View {
             FeedView()
                 .tabItem {
                     Image(systemName: "list.bullet")
-                    Text("Feed")
+                    L.feed
                 }
                 .tag(AppTab.feed)
             MapView()
                 .tabItem {
                     Image(systemName: "map")
-                    Text("Map")
+                    L.map
                 }
                 .tag(AppTab.map)
             AboutView()
                 .tabItem {
                     Image(systemName: "info.circle")
-                    Text("About")
+                    L.about
                 }
                 .tag(AppTab.about)
             ContributorsView()
                 .tabItem {
                     Image(systemName: "person.3")
-                    Text("Contributors")
+                    L.contributors
                 }
                 .tag(AppTab.contributors)
         }

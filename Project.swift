@@ -20,13 +20,19 @@ extension Target {
     }
 }
 
-let designModule = Target.featureTarget(
-    name: "Design",
-    productName: "Design",
+let localizationModule = Target.featureTarget(
+    name: "Localization",
+    productName: "Localization",
     dependencies: [],
     hasResources: true
 )
 
+let designModule = Target.featureTarget(
+    name: "Design",
+    productName: "Design",
+    dependencies: [.target(localizationModule)],
+    hasResources: true
+)
 
 let feedModule = Target.featureTarget(
     name: "Feed",
@@ -52,7 +58,6 @@ let mapModule = Target.featureTarget(
     dependencies: [.target(designModule)]
 )
 
-
 let authModule = Target.featureTarget(
     name: "Auth",
     productName: "Auth",
@@ -65,10 +70,58 @@ let onboardingModule = Target.featureTarget(
     dependencies: [.target(designModule)]
 )
 
+let localicationCodegen = Target.target(
+    name: "LocalizationCodegen",
+    destinations: .macOS,
+    product: .commandLineTool,
+    productName: "LocalizationCodegen",
+    bundleId: "com.swiftbuddies.localization",
+    sources: ["SwiftBuddiesIOS/Targets/ScriptsModule/LocalizationCodegen/**"],
+    scripts: [],
+    dependencies: [.package(product: "ArgumentParser", type: .runtime, condition: .none)],
+    coreDataModels: [],
+    environmentVariables: [:],
+    launchArguments: [],
+    additionalFiles: [],
+    buildRules: [],
+    mergedBinaryType: .automatic,
+    mergeable: false
+)
+
+
+
+//let scriptsModule = Target.target(
+//    name: "Scripts",
+//    destinations: .macOS,
+//    product: .staticFramework,
+//    productName: "Scripts",
+//    bundleId: "com.swiftbuddies.scripts",
+//    deploymentTargets: nil,
+//    infoPlist: nil,
+//    
+//    sources: ["SwiftBuddiesIOS/Targets/ScriptsModule/**"],
+//    resources: nil,
+//    copyFiles: nil,
+//    headers: nil,
+//    entitlements: nil,
+//    scripts: [],
+//    dependencies: [.target(localicationCodegen)],
+//    settings: nil,
+//    coreDataModels: [],
+//    environmentVariables: [:],
+//    launchArguments: [],
+//    additionalFiles: [],
+//    buildRules: [],
+//    mergedBinaryType: .automatic,
+//    mergeable: false
+//)
 
 let project = Project(
     name: "SwiftBuddiesIOS",
-    packages: [.remote(url: "https://github.com/google/GoogleSignIn-iOS.git", requirement: .exact("7.0.0"))],
+    packages: [
+        .remote(url: "https://github.com/google/GoogleSignIn-iOS.git", requirement: .exact("7.0.0")),
+        .remote(url: "https://github.com/apple/swift-argument-parser.git", requirement: .exact("1.3.0"))
+    ],
     targets: [
         .target(
             name: "SwiftBuddiesIOS",
@@ -98,7 +151,10 @@ let project = Project(
                 .target(contributorsModule),
                 .target(mapModule),
                 .target(aboutModule),
-                .target(onboardingModule)
+                .target(onboardingModule),
+                .target(localizationModule)
+//                .target(scriptsModule),
+//                .target(localicationCodegen)
             ]
         ),
         authModule,
@@ -107,6 +163,9 @@ let project = Project(
         contributorsModule,
         mapModule,
         aboutModule,
-        onboardingModule
+        onboardingModule,
+//        scriptsModule,
+        localizationModule,
+        localicationCodegen
     ]
 )

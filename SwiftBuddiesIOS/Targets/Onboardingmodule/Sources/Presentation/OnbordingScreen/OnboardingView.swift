@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Design
+import Localization
 
 public struct OnboardingView: View {
     @AppStorage("isSplashScreenViewed") var isOnboardingScreenViewed : Bool = false
@@ -36,8 +37,7 @@ public struct OnboardingView: View {
                 .padding(.top,20)
                 .onAppear { setPageIndicatorColor() }
                 let isLastItem: Bool = onboardingData.count - 1 == currentOnboardingItem
-                let buttonTitle: LocalizedStringKey = isLastItem ? "onboarding.StartButtonTitle": "onboarding.ButtonTitle"
-                BuddiesActionButton(title: buttonTitle) {
+                BuddiesActionButton(label: isLastItem ? L.onboarding_startbuttontitle: L.onboarding_buttontitle) {
                     if isLastItem {
                         withAnimation(.easeInOut) { isOnboardingScreenViewed = true }
                         
