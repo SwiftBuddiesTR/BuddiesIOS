@@ -52,7 +52,7 @@ extension AuthenticationView {
         Button {
             Task {
                 do {
-                    try await viewModel.signInAnonymous()
+                    try await viewModel.signIn(provider: .anonymous)
                     showSignInView = false
                 } catch {
                     debugPrint(error)
@@ -68,7 +68,7 @@ extension AuthenticationView {
         Button {
             Task {
                 do {
-                    try await viewModel.signInGoogle()
+                    try await viewModel.signIn(provider: .google)
                     showSignInView = false
                 } catch {
                     debugPrint(error)
@@ -84,7 +84,7 @@ extension AuthenticationView {
         Button(action: {
             Task {
                 do {
-                    try await viewModel.signInApple()
+                    try await viewModel.signIn(provider: .apple)
                     showSignInView = false
                 } catch {
                     debugPrint(error)
