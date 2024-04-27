@@ -4,20 +4,14 @@ import Auth
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
     
-    func signInGoogle() async throws {
-        let helper = SignInGoogleHelper()
-        let tokens = try await helper.signIn()
-        let _ = try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
+    private let authManager: AuthWithSSOProtocol
+    
+    init(authManager: AuthWithSSOProtocol = AuthenticationManager.shared) {
+        self.authManager = authManager
     }
     
-    func signInApple() async throws {
-        let helper = SignInAppleHelper()
-        let tokens = try await helper.startSignInWithAppleFlow()
-        let _ = try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
-    }
-    
-    func signInAnonymous() async throws {
-        let _ = try await AuthenticationManager.shared.signInAnonymous()
+    func signIn(provider: AuthSSOOption) async throws {
+        let _ = try await authManager.signIn(provider: provider)
     }
     
 }

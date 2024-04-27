@@ -1,19 +1,10 @@
 import Foundation
 import GoogleSignIn
 
-public struct GoogleSignInResultModel {
-    let idToken: String
-    let accessToken: String
-    let name: String?
-    let email: String?
-}
-
-final public class SignInGoogleHelper {
-    
-    public init() { }
+final class SignInGoogleHelper {
     
     @MainActor
-    public func signIn() async throws -> GoogleSignInResultModel {
+    public func signIn() async throws -> GoogleSignInResult {
         guard let vc = UIApplication.shared.windows.first?.rootViewController else {
             throw URLError(.cannotFindHost)
         }
@@ -28,7 +19,7 @@ final public class SignInGoogleHelper {
         let name = gidSignInResult.user.profile?.name
         let email = gidSignInResult.user.profile?.email
 
-        let tokens = GoogleSignInResultModel(idToken: idToken, accessToken: accessToken, name: name, email: email)
+        let tokens = GoogleSignInResult(idToken: idToken, accessToken: accessToken, name: name, email: email)
         return tokens
     }
     

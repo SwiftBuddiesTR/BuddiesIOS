@@ -22,20 +22,13 @@ public struct SignInWithAppleButtonViewRepresentable: UIViewRepresentable {
     
 }
 
-public struct SignInWithAppleResult {
-    let token: String
-    let nonce: String
-    let name: String?
-    let email: String?
-}
-
 @MainActor
-final public class SignInAppleHelper: NSObject {
+final class SignInAppleHelper: NSObject {
     
     private var currentNonce: String?
     private var completionHandler: ((Result<SignInWithAppleResult, Error>) -> Void)?
     
-    public init(currentNonce: String? = nil, completionHandler: ( (Result<SignInWithAppleResult, Error>) -> Void)? = nil) {
+    init(currentNonce: String? = nil, completionHandler: ((Result<SignInWithAppleResult, Error>) -> Void)? = nil) {
         self.currentNonce = currentNonce
         self.completionHandler = completionHandler
     }
@@ -140,7 +133,7 @@ extension SignInAppleHelper: ASAuthorizationControllerDelegate {
     }
     
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        print("Sign in with Apple errored: \(error)")
+        debugPrint("Sign in with Apple errored: \(error)")
         completionHandler?(.failure(URLError(.cannotFindHost)))
     }
 
