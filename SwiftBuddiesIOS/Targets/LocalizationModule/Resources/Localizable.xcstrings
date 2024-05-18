@@ -1,15 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Contributors" : {
-
-    },
-    "Feed" : {
-
-    },
-    "Map" : {
-
-    },
     "onboarding.ButtonTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -75,9 +66,6 @@
           }
         }
       }
-    },
-    "Profile" : {
-
     }
   },
   "version" : "1.0"
