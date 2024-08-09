@@ -6,18 +6,19 @@
 //
 
 import Design
+import Localization
 
 public struct OnboardingBuilder {
     public static func build() -> OnboardingView {
         
         let onboardingItems: [OnboardingItemModel] = [
             .init(id: 0,
-                  title: "onboardingItem.FirstTitle",
-                  description: "onboardingItem.FirstDescription",
+                  title: L.$onboardingitem_firsttitle.localized,
+                  description: L.$onboardingitem_firstdescription.localized,
                   image: DesignAsset.onboardingWelcomeImage.swiftUIImage),
             .init(id: 1,
-                  title: "onboardingItem.SecondTitle",
-                  description: "onboardingItem.SecondDescription",
+                  title: L.$onboardingitem_secondtitle.localized,
+                  description: L.$onboardingitem_seconddescription.localized,
                   image: DesignAsset.onboardingBuddiesImage.swiftUIImage)
         ]
         
