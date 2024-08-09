@@ -43,12 +43,6 @@ let authModule = Target.featureTarget(
     ]
 )
 
-let onboardingModule = Target.featureTarget(
-    name: "Onboarding",
-    productName: "Onboarding",
-    dependencies: [.target(designModule)]
-)
-
 let localicationCodegen = Target.target(
     name: "LocalizationCodegen",
     destinations: .macOS,
@@ -94,25 +88,6 @@ let localicationCodegen = Target.target(
 //    mergedBinaryType: .automatic,
 //    mergeable: false
 //)
-let loginModule = Target.featureTarget(
-    name: "Login",
-    productName: "Login",
-    dependencies: [
-        .target(designModule),
-        .target(authModule),
-        .package(product: "GoogleSignIn", type: .runtime, condition: .none),
-        .package(product: "FirebaseAuth", type: .runtime, condition: .none)
-    ]
-)
-
-let authModule = Target.featureTarget(
-    name: "Auth",
-    productName: "Auth",
-    dependencies: [
-        .package(product: "GoogleSignIn", type: .runtime, condition: .none),
-        .package(product: "FirebaseAuth", type: .runtime, condition: .none)
-    ]
-)
 
 let onboardingModule = Target.featureTarget(
     name: "Onboarding",
