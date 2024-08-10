@@ -43,6 +43,16 @@ let authModule = Target.featureTarget(
     ]
 )
 
+let networkModule = Target.featureTarget(
+    name: "Network",
+    productName: "Network",
+    dependencies: [
+        .target(authModule),
+        .package(product: "GoogleSignIn", type: .runtime, condition: .none),
+        .package(product: "FirebaseAuth", type: .runtime, condition: .none)
+    ]
+)
+
 let localicationCodegen = Target.target(
     name: "LocalizationCodegen",
     destinations: .macOS,
@@ -101,6 +111,7 @@ let loginModule = Target.featureTarget(
     dependencies: [
         .target(designModule),
         .target(authModule),
+        .target(networkModule),
         .package(product: "GoogleSignIn", type: .runtime, condition: .none),
         .package(product: "FirebaseAuth", type: .runtime, condition: .none)
     ]
@@ -175,6 +186,7 @@ let project = Project(
                 .target(mapModule),
                 .target(profileModule),
                 .target(contributorsModule),
+                .target(networkModule),
 //                .target(scriptsModule),
 //                .target(localicationCodegen)
                 .target(localizationModule)
@@ -188,6 +200,7 @@ let project = Project(
         mapModule,
         profileModule,
         contributorsModule,
+        networkModule,
 //        scriptsModule,
         localizationModule,
         localicationCodegen

@@ -14,12 +14,9 @@ public struct AuthenticationView: View {
     public var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                SignInEmailView(showSignInView: $showSignInView)
-                
-                dividerView
+                swiftBuddiesImage
                 
                 Group {
-                    anonymousSignInButton
                     googleSignInButton
                     appleSignInButton
                 }
@@ -30,38 +27,17 @@ public struct AuthenticationView: View {
             .padding()
             .frame(maxWidth: 375)
         }
-        .scrollIndicators(.never)
+        .scrollIndicators(.hidden)
         .onTapGesture(perform: endTextEditing)
     }
 }
 
 extension AuthenticationView {
-    private var dividerView: some View {
-        ZStack {
-            Divider()
-            
-            Text("or")
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .padding(.horizontal)
-                .background(.white)
-        }
-    }
-    
-    private var anonymousSignInButton: some View {
-        Button {
-            Task {
-                do {
-                    try await viewModel.signIn(provider: .anonymous)
-                    showSignInView = false
-                } catch {
-                    debugPrint(error)
-                }
-            }
-        } label: {
-            Text("Sign In Anonymously")
-                .withLoginButtonFormatting()
-        }
+    private var swiftBuddiesImage: some View {
+        DesignAsset.swiftBuddiesImage.swiftUIImage
+            .resizable()
+            .aspectRatio(1, contentMode: .fit)
+            .frame(height: 250)
     }
     
     private var googleSignInButton: some View {

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct GoogleSignInResult {
+public struct SignInWithGoogleResult {
     let idToken: String
     let accessToken: String
     let name: String?

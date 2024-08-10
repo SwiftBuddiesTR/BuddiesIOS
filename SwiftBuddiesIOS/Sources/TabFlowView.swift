@@ -24,7 +24,6 @@ struct TabFlowView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            
             FeedView()
                 .tabItem {
                     Image(systemName: "list.bullet")

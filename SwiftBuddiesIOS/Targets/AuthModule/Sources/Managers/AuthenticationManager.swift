@@ -4,26 +4,24 @@ import GoogleSignIn
 import FirebaseCore
 
 public enum AuthProviderOption: String {
-    case email = "password"
     case google = "google.com"
     case apple = "apple.com"
 }
 
-public enum AuthSSOOption {
-    case google, apple, anonymous
+public enum AuthSSOOption: String {
+    case google, apple
 }
 
 public final class AuthenticationManager {
-    
     public static let shared = AuthenticationManager()
     private init() { }
     
-    public func getAuthenticatedUser() throws -> AuthDataResult {
+    public func getAuthenticatedUser() throws -> AuthDataResponse {
         guard let user = Auth.auth().currentUser else {
             throw URLError(.badServerResponse)
         }
         
-        return AuthDataResult(user: user)
+        return AuthDataResponse(user: user)
     }
         
     public func signOut() throws {
@@ -37,41 +35,6 @@ public final class AuthenticationManager {
         
         try await user.delete()
     }
-    
-}
-
-// MARK: SIGN IN EMAIL
-
-extension AuthenticationManager: AuthWithEmailProtocol {
-    
-    @discardableResult
-    public func createUser(email: String, password: String) async throws -> AuthDataResult {
-        let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
-        return AuthDataResult(user: authDataResult.user)
-    }
-    
-    @discardableResult
-    public func signInUser(email: String, password: String) async throws -> AuthDataResult {
-        let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password)
-        return AuthDataResult(user: authDataResult.user)
-    }
-    
-    public func resetPassword(email: String) async throws {
-        try await Auth.auth().sendPasswordReset(withEmail: email)
-    }
-    
-}
-
-extension AuthenticationManager {
-    
-    public func updatePassword(password: String) async throws {
-        guard let user = Auth.auth().currentUser else {
-            throw URLError(.badServerResponse)
-        }
-        
-        try await user.updatePassword(to: password)
-    }
-    
 }
 
 // MARK: SIGN IN SSO
@@ -79,31 +42,15 @@ extension AuthenticationManager {
 extension AuthenticationManager: AuthWithSSOProtocol {
     
     @discardableResult
-    public func signIn(provider: AuthSSOOption) async throws -> AuthDataResult {
-        var authProvider: AuthProvider?
-        
-        switch provider {
+    public func signIn(provider: AuthSSOOption) async throws -> AuthDataResponse {        
+        let authProvider: AuthProvider = switch provider {
         case .google:
-            authProvider = GoogleAuthenticationProvider()
+            GoogleAuthenticationProvider()
         case .apple:
-            authProvider = AppleAuthenticationProvider()
-        case .anonymous:
-            return try await signInAnonymous()
+            AppleAuthenticationProvider()
         }
         
-        guard let authProvider else { throw URLError(.badServerResponse) }
-        return try await signIn(credential: authProvider.credential())
+        let authDataResult = try await Auth.auth().signIn(with: authProvider.credential())
+        return AuthDataResponse(user: authDataResult.user)
     }
-    
-    private func signIn(credential: AuthCredential) async throws -> AuthDataResult {
-        let authDataResult = try await Auth.auth().signIn(with: credential)
-        return AuthDataResult(user: authDataResult.user)
-    }
-    
-    @discardableResult
-    private func signInAnonymous() async throws -> AuthDataResult {
-        let authDataResult = try await Auth.auth().signInAnonymously()
-        return AuthDataResult(user: authDataResult.user)
-    }
-
 }
