@@ -2,10 +2,11 @@ import SwiftUI
 import Auth
 import Login
 import Onboarding
+import Design
 
 struct RootView: View {
     @AppStorage("isSplashScreenViewed") var isOnboardingScreenViewed : Bool = false
-    @State private var showSignInView: Bool = false
+    @State private var isLoggedIn: Bool = false
     
     let pub = NotificationCenter.default
         .publisher(for: .signOutNotification)
@@ -20,19 +21,15 @@ struct RootView: View {
     private func SuitableRootView() -> some View {
         if isOnboardingScreenViewed {
             ZStack {
-                if !showSignInView {
-                    TabFlowView(showSignInView: $showSignInView)
+                if isLoggedIn {
+                    TabFlowView()
                 }
             }
-            .onAppear {
-                let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-                self.showSignInView = authUser == nil
-            }
             .onReceive(pub) { _ in
-                showSignInView = true
+                isLoggedIn = false
             }
-            .fullScreenCover(isPresented: $showSignInView, content: {
-                AuthenticationView(showSignInView: $showSignInView)
+            .fullScreenCover(isPresented: $isLoggedIn.negated, content: {
+                AuthenticationView(isLoggedIn: $isLoggedIn)
             })
         } else {
             OnboardingBuilder.build()

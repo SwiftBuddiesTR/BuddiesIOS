@@ -1,5 +1,4 @@
 import SwiftUI
-import Firebase
 import GoogleSignIn
 
 @main
@@ -15,12 +14,10 @@ struct SwiftBuddiesIOSApp: App {
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        FirebaseApp.configure()
-        
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return true }
-        let config = GIDConfiguration(clientID: clientID)
-        GIDSignIn.sharedInstance.configuration = config
-        
+        if let clientID = Bundle.main.object(forInfoDictionaryKey: "CLIENT_ID") as? String {
+            let signInConfig = GIDConfiguration(clientID: clientID)
+            GIDSignIn.sharedInstance.configuration = signInConfig
+        }
         return true
     }
 }

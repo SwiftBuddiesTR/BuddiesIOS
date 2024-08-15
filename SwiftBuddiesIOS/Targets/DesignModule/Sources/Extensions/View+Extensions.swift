@@ -58,13 +58,17 @@ public extension View {
     }
 }
 
-public extension View {
+public extension Binding where Value == Bool {
+    var negated: Binding<Bool> {
+        return Binding<Bool>(
+            get: { !self.wrappedValue },
+            set: { self.wrappedValue = !$0 }
+        )
+    }
+}
 
+public extension View {
     func withLoginButtonFormatting() -> some View {
         modifier(LoginButtonViewModifier())
-    }
-    
-    func withLoginTextFieldFormatting(borderColor: Color) -> some View {
-        modifier(LoginTextFieldModifier(borderColor: borderColor))
     }
 }

@@ -38,8 +38,7 @@ let authModule = Target.featureTarget(
     name: "Auth",
     productName: "Auth",
     dependencies: [
-        .package(product: "GoogleSignIn", type: .runtime, condition: .none),
-        .package(product: "FirebaseAuth", type: .runtime, condition: .none)
+        .package(product: "GoogleSignIn", type: .runtime, condition: .none)
     ]
 )
 
@@ -48,8 +47,7 @@ let networkModule = Target.featureTarget(
     productName: "Network",
     dependencies: [
         .target(authModule),
-        .package(product: "GoogleSignIn", type: .runtime, condition: .none),
-        .package(product: "FirebaseAuth", type: .runtime, condition: .none)
+        .package(product: "GoogleSignIn", type: .runtime, condition: .none)
     ]
 )
 
@@ -112,8 +110,7 @@ let loginModule = Target.featureTarget(
         .target(designModule),
         .target(authModule),
         .target(networkModule),
-        .package(product: "GoogleSignIn", type: .runtime, condition: .none),
-        .package(product: "FirebaseAuth", type: .runtime, condition: .none)
+        .package(product: "GoogleSignIn", type: .runtime, condition: .none)
     ]
 )
 
@@ -135,8 +132,7 @@ let profileModule = Target.featureTarget(
     dependencies: [
         .target(designModule),
         .target(authModule),
-        .package(product: "GoogleSignIn", type: .runtime, condition: .none),
-        .package(product: "FirebaseAuth", type: .runtime, condition: .none)
+        .package(product: "GoogleSignIn", type: .runtime, condition: .none)
     ]
 )
 
@@ -151,7 +147,6 @@ let project = Project(
     name: "Buddies",
     packages: [
         .remote(url: "https://github.com/google/GoogleSignIn-iOS.git", requirement: .exact("7.0.0")),
-        .remote(url: "https://github.com/firebase/firebase-ios-sdk.git", requirement: .exact("10.24.0")),
         .remote(url: "https://github.com/apple/swift-argument-parser.git", requirement: .exact("1.3.0"))
     ],
     targets: [
@@ -177,7 +172,6 @@ let project = Project(
             resources: ["SwiftBuddiesIOS/Resources/**"],
             dependencies: [
                 .package(product: "GoogleSignIn", type: .runtime, condition: .none),
-                .package(product: "FirebaseAuth", type: .runtime, condition: .none),
                 .target(designModule),
                 .target(authModule),
                 .target(onboardingModule),

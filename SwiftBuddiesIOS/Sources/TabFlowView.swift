@@ -14,13 +14,7 @@ enum AppTab: Int, Identifiable {
 }
 
 struct TabFlowView: View {
-    
     @State var selectedTab: AppTab = .feed
-    @Binding private var showSignInView: Bool
-    
-    init(showSignInView: Binding<Bool>) {
-        self._showSignInView = showSignInView
-    }
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -56,5 +50,5 @@ struct TabFlowView: View {
 }
 
 #Preview {
-    TabFlowView(showSignInView: .constant(false))
+    TabFlowView()
 }

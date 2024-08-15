@@ -49,8 +49,6 @@ final class SignInAppleHelper: NSObject {
     }
 
     public func startSignInWithAppleFlow(completion: @escaping (Result<SignInWithAppleResult, Error>) -> Void) {
-        guard let vc = UIApplication.shared.windows.first?.rootViewController else { return }
-        
         let nonce = randomNonceString()
         currentNonce = nonce
         completionHandler = completion
@@ -62,7 +60,6 @@ final class SignInAppleHelper: NSObject {
         
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
         authorizationController.delegate = self
-        authorizationController.presentationContextProvider = vc
         authorizationController.performRequests()
     }
     
@@ -127,7 +124,6 @@ extension SignInAppleHelper: ASAuthorizationControllerDelegate {
         }
         let name = appleIDCredential.fullName?.givenName
         let email = appleIDCredential.email
-
         let tokens = SignInWithAppleResult(token: idTokenString, nonce: nonce, name: name, email: email)
         completionHandler?(.success(tokens))
     }

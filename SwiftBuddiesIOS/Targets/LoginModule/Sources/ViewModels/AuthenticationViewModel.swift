@@ -1,25 +1,37 @@
 import Foundation
+import Combine
 import Auth
 import Network
 
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
-    private let authManager: AuthWithSSOProtocol
+    @Published public private(set) var userInfo: SignInResponse?
     
-    init(authManager: AuthWithSSOProtocol = AuthenticationManager.shared) {
+    private let authManager: AuthWithSSOProtocol
+    private let loginDataService = LoginDataService()
+    private var cancellables = Set<AnyCancellable>()
+    
+    public init(authManager: AuthWithSSOProtocol = AuthenticationManager.shared) {
         self.authManager = authManager
+        addSubscribers()
     }
     
-    func signIn(provider: AuthSSOOption) async throws {
-        let authData = try await authManager.signIn(provider: provider)
-        NetworkManager.shared.loginRequest(registerType: provider, accessToken: authData.uid) { response in
-            switch response {
-            case .success(let success):
-                debugPrint(success.type)
-                debugPrint(success.token)
-            case .failure(let failure):
-                debugPrint(failure.localizedDescription)
+    private func addSubscribers() {
+        loginDataService.$userInfo
+            .sink { [weak self] userInfo in
+                self?.userInfo = userInfo
             }
+            .store(in: &cancellables)
+    }
+    
+    func signIn(provider: AuthProviderOption) {
+        Task {
+            try await signIn(provider: provider)
         }
+    }
+    
+    private func signIn(provider: AuthProviderOption) async throws {
+        let signInRequest = try await authManager.signIn(provider: provider)
+        loginDataService.loginRequest(with: signInRequest)
     }
 }

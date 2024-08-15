@@ -8,16 +8,6 @@
 import Foundation
 import Auth
 
-protocol EndpointProtocol {
-    var baseURL: String { get }
-    var path: String { get }
-    var method: HTTPMethod { get }
-    var header: [String: String]? { get }
-    var parameters: [String: Any]? { get }
-    
-    func request() -> URLRequest
-}
-
 enum HTTPMethod: String {
     case get = "GET"
     case post = "POST"
@@ -26,7 +16,17 @@ enum HTTPMethod: String {
 }
 
 enum Endpoint {
-    case loginRequest(registerType: AuthSSOOption, accessToken: String)
+    case loginRequest(registerType: String, accessToken: String)
+}
+
+protocol EndpointProtocol {
+    var baseURL: String { get }
+    var path: String { get }
+    var method: HTTPMethod { get }
+    var header: [String: String]? { get }
+    var parameters: [String: Any]? { get }
+    
+    func request() -> URLRequest
 }
 
 extension Endpoint: EndpointProtocol {
@@ -53,7 +53,7 @@ extension Endpoint: EndpointProtocol {
     
     var parameters: [String: Any]? {
         if case .loginRequest(let registerType, let accessToken) = self {
-            return ["registerType": registerType.rawValue, "accessToken": accessToken]
+            return ["registerType": registerType, "accessToken": accessToken]
         }
         
         return nil

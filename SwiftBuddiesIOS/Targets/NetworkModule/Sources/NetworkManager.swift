@@ -6,40 +6,47 @@
 //
 
 import Foundation
+import Combine
 import Auth
 
 public final class NetworkManager {
-    public static let shared = NetworkManager()
-    private init() {}
     
-    private func request<T: Decodable>(_ endpoint: Endpoint, completion: @escaping (Result<T, Error>) -> Void) {
-        URLSession.shared.dataTask(with: endpoint.request()) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-            }
-            
-            guard let response = response as? HTTPURLResponse, response.statusCode >= 200, response.statusCode <= 299 else {
-                completion(.failure(NSError(domain: "Invalid Response", code: 0)))
-                return
-            }
-            
-            guard let data = data else {
-                completion(.failure(NSError(domain: "Invalid Data Response", code: 0)))
-                return
-            }
-            
-            do {
-                let decodedData = try JSONDecoder().decode(T.self, from: data)
-                completion(.success(decodedData))
-            } catch let error {
-                completion(.failure(error))
+    public init() {}
+    
+    enum NetworkingError: LocalizedError {
+        case badURLResponse(urlString: String)
+        case unknown
+        
+        var errorDescription: String {
+            switch self {
+            case .badURLResponse(urlString: let url): "[🔥] Bad response from URL: \(url)"
+            case .unknown: "[⚠️] Unknown error occured."
             }
         }
-        .resume()
     }
     
-    public func loginRequest(registerType: AuthSSOOption, accessToken: String, completion: @escaping (Result<RegisterResponse, Error>) -> Void) {
-        let endpoint = Endpoint.loginRequest(registerType: registerType, accessToken: accessToken)
-        request(endpoint, completion: completion)
+    public static func download(request: URLRequest) -> AnyPublisher<Data, Error> {
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .tryMap({ try handleURLResponse(output: $0, url: request.url) })
+            .retry(3)
+            .eraseToAnyPublisher()
+    }
+    
+    private static func handleURLResponse(output: URLSession.DataTaskPublisher.Output, url: URL?) throws -> Data {
+        guard let response = output.response as? HTTPURLResponse,
+              response.statusCode >= 200 && response.statusCode < 300 else {
+            throw NetworkingError.badURLResponse(urlString: url?.description ?? "")
+        }
+        
+        return output.data
+    }
+    
+    public static func handleCompletion(completion: Subscribers.Completion<Error>) {
+        switch completion {
+        case .finished:
+            break
+        case .failure(let error):
+            print(error.localizedDescription)
+        }
     }
 }

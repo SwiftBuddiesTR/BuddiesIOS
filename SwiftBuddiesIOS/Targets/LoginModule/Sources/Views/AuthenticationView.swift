@@ -3,37 +3,34 @@ import Design
 import Auth
 
 public struct AuthenticationView: View {
-    
     @StateObject private var viewModel = AuthenticationViewModel()
-    @Binding private var showSignInView: Bool
+    @Binding private var isLoggedIn: Bool
     
-    public init(showSignInView: Binding<Bool>) {
-        self._showSignInView = showSignInView
+    public init(isLoggedIn: Binding<Bool>) {
+        _isLoggedIn = isLoggedIn
     }
     
     public var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                swiftBuddiesImage
-                
-                Group {
-                    googleSignInButton
-                    appleSignInButton
-                }
-                .clipShape(Capsule())
-                
-                Spacer()
+        VStack(spacing: 20) {
+            swiftBuddies
+                .padding(.bottom)
+            
+            Group {
+                googleSignInButton
+                appleSignInButton
             }
-            .padding()
-            .frame(maxWidth: 375)
+            .clipShape(Capsule())
         }
-        .scrollIndicators(.hidden)
-        .onTapGesture(perform: endTextEditing)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
+        .onChange(of: viewModel.userInfo) { _, newValue in
+            isLoggedIn = newValue != nil
+        }
     }
 }
 
 extension AuthenticationView {
-    private var swiftBuddiesImage: some View {
+    private var swiftBuddies: some View {
         DesignAsset.swiftBuddiesImage.swiftUIImage
             .resizable()
             .aspectRatio(1, contentMode: .fit)
@@ -42,32 +39,18 @@ extension AuthenticationView {
     
     private var googleSignInButton: some View {
         Button {
-            Task {
-                do {
-                    try await viewModel.signIn(provider: .google)
-                    showSignInView = false
-                } catch {
-                    debugPrint(error)
-                }
-            }
+            viewModel.signIn(provider: .google)
         } label: {
-            Text("Sign In With Google")
+            Text("Sign in with Google")
                 .withLoginButtonFormatting()
         }
     }
     
     private var appleSignInButton: some View {
         Button(action: {
-            Task {
-                do {
-                    try await viewModel.signIn(provider: .apple)
-                    showSignInView = false
-                } catch {
-                    debugPrint(error)
-                }
-            }
+            viewModel.signIn(provider: .apple)
         }, label: {
-            SignInWithAppleButtonViewRepresentable(type: .default, style: .black)
+            SignInWithAppleButtonViewRepresentable(type: .default, style: .white)
                 .allowsHitTesting(false)
                 .withLoginButtonFormatting()
         })
@@ -75,5 +58,5 @@ extension AuthenticationView {
 }
 
 #Preview {
-    AuthenticationView(showSignInView: .constant(true))
+    AuthenticationView(isLoggedIn: .constant(false))
 }
