@@ -24,7 +24,8 @@ let project = Project(
     name: "Buddies",
     packages: [
         .remote(url: "https://github.com/google/GoogleSignIn-iOS.git", requirement: .exact("7.0.0")),
-        .remote(url: "https://github.com/apple/swift-argument-parser.git", requirement: .exact("1.3.0"))
+        .remote(url: "https://github.com/apple/swift-argument-parser.git", requirement: .exact("1.3.0")),
+        .remote(url: "https://github.com/darkbringer1/BuddiesNetwork.git", requirement: .branch("main"))
     ],
     targets: [
         .target(
@@ -49,6 +50,7 @@ let project = Project(
             resources: ["SwiftBuddiesIOS/Resources/**"],
             dependencies: [
                 .package(product: "GoogleSignIn", type: .runtime, condition: .none),
+                .package(product: "BuddiesNetwork", type: .runtime, condition: .none),
                 .target(Modules.design.target),
                 .target(Modules.auth.target),
                 .target(Modules.onboarding.target),
@@ -107,7 +109,9 @@ enum Modules: CaseIterable {
             Target.featureTarget(
                 name: "Network",
                 productName: "Network",
-                dependencies: []
+                dependencies: [
+                    .package(product: "BuddiesNetwork", type: .runtime, condition: .none)
+                ]
             )
         case .auth:
             Target.featureTarget(
