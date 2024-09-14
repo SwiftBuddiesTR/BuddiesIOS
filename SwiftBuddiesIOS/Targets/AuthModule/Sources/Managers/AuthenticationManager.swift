@@ -1,4 +1,6 @@
 import Foundation
+import BuddiesNetwork
+import Network
 
 public enum AuthProviderOption: String {
     case google, apple
@@ -22,11 +24,11 @@ public final class AuthenticationManager {
 // MARK: SIGN IN SSO
 
 public protocol AuthWithSSOProtocol {
-    func signIn(provider: AuthProviderOption) async throws -> SignInRequest
+    func signIn(provider: AuthProviderOption) async throws
 }
 
 extension AuthenticationManager: AuthWithSSOProtocol {
-    public func signIn(provider: AuthProviderOption) async throws -> SignInRequest {
+    public func signIn(provider: AuthProviderOption) async throws {
         let authProvider: AuthProvider = switch provider {
         case .google:
             GoogleAuthenticationProvider()
@@ -34,6 +36,46 @@ extension AuthenticationManager: AuthWithSSOProtocol {
             AppleAuthenticationProvider()
         }
         
-        return try await authProvider.signIn()
+        let credentials = try await authProvider.signIn()
+        
+        await BuddiesAuthentication.registerUser(signInRequest: credentials)
+    }
+}
+
+public final class BuddiesAuthentication {
+    
+    static let apiClient: BuddiesClient = .shared
+    
+    public static func registerUser(signInRequest: SignInRequest) async {
+        let request = RegisterRequest(
+            accessToken: signInRequest.accessToken,
+            registerType: signInRequest.type
+        )
+        
+        do {
+            let data = try await apiClient.perform(request)
+            
+        } catch {
+            debugPrint(error)
+        }
+        // save to keychain
+    }
+}
+
+struct RegisterRequest: Requestable {
+    var accessToken: String
+    var registerType: String
+    
+    struct Data: Decodable {
+        let token: String
+        let type: String
+    }
+    
+    func toUrlRequest() throws -> URLRequest {
+        try URLProvider.returnUrlRequest(
+            method: .post,
+            url: APIs.Login.register.url(),
+            data: self
+        )
     }
 }

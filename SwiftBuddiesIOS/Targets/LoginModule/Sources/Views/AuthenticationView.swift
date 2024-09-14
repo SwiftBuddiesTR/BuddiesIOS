@@ -4,10 +4,8 @@ import Auth
 
 public struct AuthenticationView: View {
     @StateObject private var viewModel = AuthenticationViewModel()
-    @Binding private var isLoggedIn: Bool
-    
-    public init(isLoggedIn: Binding<Bool>) {
-        _isLoggedIn = isLoggedIn
+
+    public init() {
     }
     
     public var body: some View {
@@ -23,9 +21,6 @@ public struct AuthenticationView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
-        .onChange(of: viewModel.userInfo) { _, newValue in
-            isLoggedIn = newValue != nil
-        }
     }
 }
 
@@ -39,7 +34,11 @@ extension AuthenticationView {
     
     private var googleSignInButton: some View {
         Button {
-            viewModel.signIn(provider: .google)
+            do {
+                try viewModel.signIn(provider: .google)
+            } catch {
+                debugPrint(error)
+            }
         } label: {
             Text("Sign in with Google")
                 .withLoginButtonFormatting()
@@ -47,16 +46,20 @@ extension AuthenticationView {
     }
     
     private var appleSignInButton: some View {
-        Button(action: {
-            viewModel.signIn(provider: .apple)
-        }, label: {
+        Button {
+            do {
+                try viewModel.signIn(provider: .apple)
+            } catch {
+                debugPrint(error)
+            }
+        } label: {
             SignInWithAppleButtonViewRepresentable(type: .default, style: .white)
                 .allowsHitTesting(false)
                 .withLoginButtonFormatting()
-        })
+        }
     }
 }
 
 #Preview {
-    AuthenticationView(isLoggedIn: .constant(false))
+    AuthenticationView()
 }

@@ -1,5 +1,4 @@
 import SwiftUI
-import Auth
 import Login
 import Onboarding
 import Design
@@ -29,7 +28,7 @@ struct RootView: View {
                 isLoggedIn = false
             }
             .fullScreenCover(isPresented: $isLoggedIn.negated, content: {
-                AuthenticationView(isLoggedIn: $isLoggedIn)
+                AuthenticationView()
             })
         } else {
             OnboardingBuilder.build()

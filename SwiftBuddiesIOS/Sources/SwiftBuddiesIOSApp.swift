@@ -5,6 +5,9 @@ import Network
 @main
 struct SwiftBuddiesIOSApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
+    init() {
+    }
     
     var body: some Scene {
         WindowGroup {
@@ -28,17 +31,20 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 }
 
-public class DependencyContainer {
+public class DependencyContainer: ObservableObject {
+    
+    var buddiesNetwork: BuddiesClient!
+    
     @MainActor
     func build(_ launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
-        let interceptorProvider: BuddiesInterceptorProvider = BuddiesInterceptorProvider(
+        let buddiesInterceptorProvider = BuddiesInterceptorProvider(
             client: .init(
                 sessionConfiguration: .default
             )
         )
         
         let buddiesChainNetworkTransport = BuddiesRequestChainNetworkTransport.getChainNetworkTransport(
-            interceptorProvider: interceptorProvider
+            interceptorProvider: buddiesInterceptorProvider
         )
         
         let buddiesClient = BuddiesClient(
@@ -46,5 +52,6 @@ public class DependencyContainer {
         )
         
         BuddiesClient.shared = buddiesClient
+        self.buddiesNetwork = BuddiesClient.shared
     }
 }

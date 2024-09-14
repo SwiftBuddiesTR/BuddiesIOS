@@ -2,36 +2,21 @@ import Foundation
 import Combine
 import Auth
 import Network
+import BuddiesNetwork
 
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
-    @Published public private(set) var userInfo: SignInResponse?
-    
+    private let apiClient: BuddiesClient
     private let authManager: AuthWithSSOProtocol
-//    private let loginDataService = LoginDataService()
-    private var cancellables = Set<AnyCancellable>()
     
     public init(authManager: AuthWithSSOProtocol = AuthenticationManager.shared) {
         self.authManager = authManager
-        addSubscribers()
+        self.apiClient = .shared
     }
     
-    private func addSubscribers() {
-//        loginDataService.$userInfo
-//            .sink { [weak self] userInfo in
-//                self?.userInfo = userInfo
-//            }
-//            .store(in: &cancellables)
-    }
-    
-    func signIn(provider: AuthProviderOption) {
+    func signIn(provider: AuthProviderOption) throws {
         Task {
-            try await signIn(provider: provider)
+            try await authManager.signIn(provider: provider)
         }
-    }
-    
-    private func signIn(provider: AuthProviderOption) async throws {
-        let signInRequest = try await authManager.signIn(provider: provider)
-//        loginDataService.loginRequest(with: signInRequest)
     }
 }
