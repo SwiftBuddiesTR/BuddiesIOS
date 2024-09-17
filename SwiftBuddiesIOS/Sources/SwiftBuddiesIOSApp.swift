@@ -1,6 +1,7 @@
 import SwiftUI
 import GoogleSignIn
 import Network
+import Auth
 
 @main
 struct SwiftBuddiesIOSApp: App {
@@ -26,7 +27,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
         
         dependencyContainer = DependencyContainer()
-        dependencyContainer.build(launchOptions)
+        dependencyContainer.build(launchOptions) {
+            KeychainManager.shared.get(key: .accessToken)
+        }
         return true
     }
 }
@@ -36,11 +39,12 @@ public class DependencyContainer: ObservableObject {
     var buddiesNetwork: BuddiesClient!
     
     @MainActor
-    func build(_ launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
+    func build(_ launchOptions: [UIApplication.LaunchOptionsKey: Any]?, accessToken: @escaping (() -> String?)) {
         let buddiesInterceptorProvider = BuddiesInterceptorProvider(
             client: .init(
                 sessionConfiguration: .default
-            )
+            ),
+            currentToken: accessToken
         )
         
         let buddiesChainNetworkTransport = BuddiesRequestChainNetworkTransport.getChainNetworkTransport(

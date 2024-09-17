@@ -11,20 +11,19 @@ import BuddiesNetwork
 public final class BuddiesInterceptorProvider: InterceptorProvider {
     let client: URLSessionClient
     
-    public init(client: URLSessionClient) {
+    public init(client: URLSessionClient, currentToken: @escaping (() -> String?)) {
         self.client = client
+        self.currentToken = currentToken
     }
     
-    public var currentToken: () -> String? = {
-//        KeychainManager.shared.get(key: .accessToken)
-        ""
-    }
+    public var currentToken: () -> String?
     
     public  func interceptors(for request: some Requestable) -> [Interceptor] {
         [
             MaxRetryInterceptor(maxRetry: 3),
-            TokenProviderInterceptor(currentToken: currentToken),
-            NetworkFetchInterceptor(client: client)
+            BuddiesTokenProviderInterceptor(currentToken: currentToken),
+            NetworkFetchInterceptor(client: client),
+            JSONDecodingInterceptor()
         ]
     }
     
@@ -58,5 +57,45 @@ public final class BuddiesRequestChainNetworkTransport {
         interceptorProvider: some InterceptorProvider
     ) -> any NetworkTransportProtocol {
         return DefaultRequestChainNetworkTransport(interceptorProvider: interceptorProvider)
+    }
+}
+
+// MARK: - Token Interceptor provider
+public final class BuddiesTokenProviderInterceptor: Interceptor {
+    
+    enum TokenProviderError: Error, LocalizedError {
+        case tokenNotFound
+        
+        var errorDescription: String? {
+            switch self {
+            case .tokenNotFound: "Token is not found."
+            }
+        }
+    }
+    
+    public var id: String = UUID().uuidString
+    
+    var currentToken: () -> String?
+    
+    public init(currentToken: @escaping () -> String?) {
+        self.currentToken = currentToken
+    }
+    
+    public func intercept<Request>(
+        chain: RequestChain,
+        request: HTTPRequest<Request>,
+        response: HTTPResponse<Request>?,
+        completion: @escaping (Result<Request.Data, Error>) -> Void
+    ) where Request: Requestable {
+        if let token = currentToken() {
+            request.addHeader(key: "Authorization", val: "\(token)")
+        }
+        
+        chain.proceed(
+            request: request,
+            interceptor: self,
+            response: response,
+            completion: completion
+        )
     }
 }

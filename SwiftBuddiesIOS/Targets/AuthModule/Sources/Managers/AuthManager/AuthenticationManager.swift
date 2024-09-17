@@ -15,9 +15,10 @@ public final class AuthenticationManager {
 //    public func getAuthenticatedUser() {
 //        
 //    }
-//    
+
     public func signOut() throws {
         //signOut
+        KeychainManager.shared.delete(.accessToken)
     }
 }
 
@@ -54,7 +55,9 @@ public final class BuddiesAuthentication {
         
         do {
             let data = try await apiClient.perform(request)
-            
+            let token = data.token
+            let type = data.type 
+            KeychainManager.shared.save(key: .accessToken, value: token)
         } catch {
             debugPrint(error)
         }
