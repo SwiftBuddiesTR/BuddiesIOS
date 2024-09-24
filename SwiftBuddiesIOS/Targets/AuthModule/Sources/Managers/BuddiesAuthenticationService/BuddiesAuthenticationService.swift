@@ -21,6 +21,10 @@ public final class BuddiesAuthenticationService {
         self.apiClient = apiClient
     }
     
+    public func logout() async {
+        await loginState()
+    }
+    
     public func registerUser(signInRequest: SignInRequest) async {
         let request = RegisterRequest(
             accessToken: signInRequest.accessToken,
@@ -35,12 +39,12 @@ public final class BuddiesAuthenticationService {
             await loginState(token: token)
         } catch {
             debugPrint(error)
-            await loginState(token: nil)
+            await loginState()
         }
     }
     
     @MainActor
-    private func loginState(token: String?) async {
+    private func loginState(token: String? = nil) async {
         if let token {
             KeychainManager.shared.save(key: .accessToken, value: token)
             notificationCenter.post(name: .didLoggedIn, object: nil)

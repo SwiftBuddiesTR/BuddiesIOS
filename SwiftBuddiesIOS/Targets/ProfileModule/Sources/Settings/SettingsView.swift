@@ -11,7 +11,6 @@ struct SettingsView: View {
                 Task {
                     do {
                         try viewModel.signOut()
-                        NotificationCenter.default.post(name: .signOutNotification, object: nil)
                     } catch {
                         debugPrint(error)
                     }

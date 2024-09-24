@@ -17,7 +17,9 @@ public final class AuthenticationManager {
     public func signOut() throws {
         //signOut
         KeychainManager.shared.delete(.accessToken)
-        
+        Task {
+            await authService.logout()
+        }
     }
 }
 
