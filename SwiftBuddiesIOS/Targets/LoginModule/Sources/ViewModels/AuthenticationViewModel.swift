@@ -5,11 +5,11 @@ import Network
 import BuddiesNetwork
 
 @MainActor
-final class AuthenticationViewModel: ObservableObject {
+final public class AuthenticationViewModel: ObservableObject {
     private let apiClient: BuddiesClient
     private let authManager: AuthWithSSOProtocol
-    
-    public init(authManager: AuthWithSSOProtocol = AuthenticationManager.shared) {
+     
+    public init(authManager: AuthWithSSOProtocol) {
         self.authManager = authManager
         self.apiClient = .shared
     }

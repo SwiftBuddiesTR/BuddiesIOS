@@ -3,9 +3,11 @@ import Design
 import Auth
 
 public struct AuthenticationView: View {
-    @StateObject private var viewModel = AuthenticationViewModel()
+    @Environment(\.colorScheme) var colorScheme
+    @ObservedObject private var viewModel: AuthenticationViewModel
 
-    public init() {
+    public init(viewModel: AuthenticationViewModel) {
+        self.viewModel = viewModel
     }
     
     public var body: some View {
@@ -53,13 +55,9 @@ extension AuthenticationView {
                 debugPrint(error)
             }
         } label: {
-            SignInWithAppleButtonViewRepresentable(type: .default, style: .white)
+            SignInWithAppleButtonViewRepresentable(type: .default, style: colorScheme == .light ? .black : .white)
                 .allowsHitTesting(false)
                 .withLoginButtonFormatting()
         }
     }
-}
-
-#Preview {
-    AuthenticationView()
 }

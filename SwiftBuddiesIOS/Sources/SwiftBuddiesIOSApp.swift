@@ -13,6 +13,7 @@ struct SwiftBuddiesIOSApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .environmentObject(delegate.dependencyContainer)
         }
     }
 }
@@ -36,10 +37,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 public class DependencyContainer: ObservableObject {
     
-    var buddiesNetwork: BuddiesClient!
+    public var buddiesNetwork: BuddiesClient!
+    public var buddiesAuthenticator: BuddiesAuthenticationService!
+    public var authManager: AuthenticationManager!
     
     @MainActor
     func build(_ launchOptions: [UIApplication.LaunchOptionsKey: Any]?, accessToken: @escaping (() -> String?)) {
+        
         let buddiesInterceptorProvider = BuddiesInterceptorProvider(
             client: .init(
                 sessionConfiguration: .default
@@ -57,5 +61,17 @@ public class DependencyContainer: ObservableObject {
         
         BuddiesClient.shared = buddiesClient
         self.buddiesNetwork = BuddiesClient.shared
+        
+        let buddiesAuthService = BuddiesAuthenticationService(
+            notificationCenter: .default,
+            apiClient: .shared
+        )
+        
+        BuddiesAuthenticationService.shared = buddiesAuthService
+        self.buddiesAuthenticator = buddiesAuthService
+        
+        let authenticationManager = AuthenticationManager(authService: BuddiesAuthenticationService.shared)
+        AuthenticationManager.shared = authenticationManager
+        self.authManager = authenticationManager
     }
 }
