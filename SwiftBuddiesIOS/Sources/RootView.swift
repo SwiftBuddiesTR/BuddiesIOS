@@ -7,7 +7,6 @@ import Auth
 struct RootView: View {
     @AppStorage("isSplashScreenViewed") var isOnboardingScreenViewed : Bool = false
     @State private var isLoggedOut: Bool = true
-    @EnvironmentObject private var dependencies: DependencyContainer
 
     let loggedOut = NotificationCenter.default.publisher(for: .didLoggedOut)
     let loggedIn = NotificationCenter.default.publisher(for: .didLoggedIn)
@@ -26,9 +25,7 @@ struct RootView: View {
                     TabFlowView()
                 } else {
                     AuthenticationView(
-                        viewModel: AuthenticationViewModel(
-                            authManager: dependencies.authManager
-                        )
+                        viewModel: AuthenticationViewModel()
                     )
                 }
             }
