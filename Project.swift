@@ -5,6 +5,7 @@ extension Target {
     static func featureTarget(
         name: String,
         productName: String,
+        product: Product = .staticLibrary,
         dependencies: [TargetDependency],
         hasResources: Bool = false
     ) -> Self {
@@ -60,7 +61,8 @@ let project = Project(
                 .target(Modules.profile.target),
                 .target(Modules.contributors.target),
                 .target(Modules.network.target),
-                .target(Modules.localization.target)
+                .target(Modules.localization.target),
+                .target(Modules.core.target)
             ]
         ),
         Modules.design.target,
@@ -73,11 +75,14 @@ let project = Project(
         Modules.contributors.target,
         Modules.network.target,
         Modules.localization.target,
+        Modules.core.target,
         Modules.localicationCodegen
     ]
 )
 
+
 enum Modules: CaseIterable {
+    case core
     case localization
     case design
     case network
@@ -89,8 +94,17 @@ enum Modules: CaseIterable {
     case profile
     case contributors
     
+    
     var target: Target {
         switch self {
+        case .core:
+            Target.featureTarget(
+                name: "Core",
+                productName: "Core",
+                dependencies: /*Modules.allCases.filter { $0 != .core }.compactMap { .target($0.target) }*/
+//                [.target(Modules.auth.target), .target(Modules.network.target)]
+                []
+            )
         case .localization:
             Target.featureTarget(
                 name: "Localization",
@@ -119,6 +133,7 @@ enum Modules: CaseIterable {
                 productName: "Auth",
                 dependencies: [
                     .target(Modules.network.target),
+                    .target(Modules.core.target),
                     .package(product: "GoogleSignIn", type: .runtime, condition: .none)
                 ]
             )
@@ -126,7 +141,10 @@ enum Modules: CaseIterable {
             Target.featureTarget(
                 name: "Onboarding",
                 productName: "Onboarding",
-                dependencies: [.target(Modules.design.target)]
+                dependencies: [
+                    .target(Modules.design.target),
+                               .target(Modules.core.target),
+                ]
             )
         case .login:
             Target.featureTarget(
@@ -136,6 +154,7 @@ enum Modules: CaseIterable {
                     .target(Modules.design.target),
                     .target(Modules.auth.target),
                     .target(Modules.network.target),
+                    .target(Modules.core.target),
                     .package(product: "GoogleSignIn", type: .runtime, condition: .none)
                 ]
             )
@@ -143,13 +162,19 @@ enum Modules: CaseIterable {
             Target.featureTarget(
                 name: "Feed",
                 productName: "Feed",
-                dependencies: [.target(Modules.design.target)]
+                dependencies: [
+                    .target(Modules.core.target),
+                    .target(Modules.design.target)
+                ]
             )
         case .map:
             Target.featureTarget(
                 name: "Map",
                 productName: "Map",
-                dependencies: [.target(Modules.design.target)]
+                dependencies: [
+                    .target(Modules.core.target),
+                    .target(Modules.design.target)
+                ]
             )
         case .profile:
             Target.featureTarget(
@@ -159,6 +184,7 @@ enum Modules: CaseIterable {
                     .target(Modules.design.target),
                     .target(Modules.auth.target),
                     .target(Modules.network.target),
+                    .target(Modules.core.target),
                     .package(product: "GoogleSignIn", type: .runtime, condition: .none)
                 ]
             )
@@ -166,7 +192,10 @@ enum Modules: CaseIterable {
             Target.featureTarget(
                 name: "Contributors",
                 productName: "Contributors",
-                dependencies: [.target(Modules.design.target)]
+                dependencies: [
+                    .target(Modules.core.target),
+                    .target(Modules.design.target)
+                ]
             )
         }
     }

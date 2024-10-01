@@ -4,10 +4,9 @@ import Auth
 
 public struct AuthenticationView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject private var viewModel: AuthenticationViewModel
+    @StateObject private var viewModel: AuthenticationViewModel = .init()
 
-    public init(viewModel: AuthenticationViewModel) {
-        self.viewModel = viewModel
+    public init() {
     }
     
     public var body: some View {

@@ -24,9 +24,7 @@ struct RootView: View {
                 if !isLoggedOut {
                     TabFlowView()
                 } else {
-                    AuthenticationView(
-                        viewModel: AuthenticationViewModel()
-                    )
+                    AuthenticationView()
                 }
             }
             .onReceive(loggedOut) { _ in

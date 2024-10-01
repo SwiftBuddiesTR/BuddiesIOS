@@ -8,9 +8,10 @@ import BuddiesNetwork
 final public class AuthenticationViewModel: ObservableObject {
     private let apiClient: BuddiesClient
     private let authManager: AuthWithSSOProtocol
-    @Dependency(\.authManager) var authManager
+//    @Dependency(\.authManager) var authManager
      
     public init() {
+        self.authManager = AuthenticationManager(authService: .shared)
         self.apiClient = .shared
     }
     
