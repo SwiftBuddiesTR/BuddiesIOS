@@ -101,9 +101,10 @@ enum Modules: CaseIterable {
             Target.featureTarget(
                 name: "Core",
                 productName: "Core",
-                dependencies: /*Modules.allCases.filter { $0 != .core }.compactMap { .target($0.target) }*/
-//                [.target(Modules.auth.target), .target(Modules.network.target)]
-                []
+                dependencies:
+                    [.target(Modules.auth.target), .target(Modules.network.target),
+                        .package(product: "GoogleSignIn", type: .runtime, condition: .none)]
+//                []
             )
         case .localization:
             Target.featureTarget(
@@ -133,7 +134,7 @@ enum Modules: CaseIterable {
                 productName: "Auth",
                 dependencies: [
                     .target(Modules.network.target),
-                    .target(Modules.core.target),
+//                    .target(Modules.core.target),
                     .package(product: "GoogleSignIn", type: .runtime, condition: .none)
                 ]
             )
@@ -143,7 +144,7 @@ enum Modules: CaseIterable {
                 productName: "Onboarding",
                 dependencies: [
                     .target(Modules.design.target),
-                               .target(Modules.core.target),
+                    .target(Modules.core.target),
                 ]
             )
         case .login:
