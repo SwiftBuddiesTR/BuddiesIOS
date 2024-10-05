@@ -70,7 +70,7 @@ let onboardingModule = Target.featureTarget(
     dependencies: [.target(designModule)]
 )
 
-let localicationCodegen = Target.target(
+let localizationCodegen = Target.target(
     name: "LocalizationCodegen",
     destinations: .macOS,
     product: .commandLineTool,
@@ -105,7 +105,7 @@ let localicationCodegen = Target.target(
 //    headers: nil,
 //    entitlements: nil,
 //    scripts: [],
-//    dependencies: [.target(localicationCodegen)],
+//    dependencies: [.target(localizationCodegen)],
 //    settings: nil,
 //    coreDataModels: [],
 //    environmentVariables: [:],
@@ -154,7 +154,7 @@ let project = Project(
                 .target(onboardingModule),
                 .target(localizationModule)
 //                .target(scriptsModule),
-//                .target(localicationCodegen)
+//                .target(localizationCodegen)
             ]
         ),
         authModule,
@@ -166,6 +166,6 @@ let project = Project(
         onboardingModule,
 //        scriptsModule,
         localizationModule,
-        localicationCodegen
+        localizationCodegen
     ]
 )
