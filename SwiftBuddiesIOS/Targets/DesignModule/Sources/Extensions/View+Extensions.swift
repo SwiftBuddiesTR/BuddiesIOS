@@ -52,4 +52,23 @@ public extension View {
             .padding(.vertical,verticalPadding)
             .background { color }
     }
+    
+    func endTextEditing() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
+public extension Binding where Value == Bool {
+    var negated: Binding<Bool> {
+        return Binding<Bool>(
+            get: { !self.wrappedValue },
+            set: { self.wrappedValue = !$0 }
+        )
+    }
+}
+
+public extension View {
+    func withLoginButtonFormatting() -> some View {
+        modifier(LoginButtonViewModifier())
+    }
 }
