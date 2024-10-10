@@ -10,7 +10,7 @@ import Auth
 import Network
 //import Core
 
-public final class DependencyContainer: @preconcurrency DependencyContainerProtocol {
+@preconcurrency public final class DependencyContainer: DependencyContainerProtocol {
     enum Error: String, LocalizedError {
         case productNotFound
         
