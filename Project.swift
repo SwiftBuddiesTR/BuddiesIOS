@@ -73,7 +73,8 @@ let project = Project(
                 .target(Modules.contributors.target),
                 .target(Modules.network.target),
                 .target(Modules.localization.target),
-                .target(Modules.core.target)
+                .target(Modules.core.target),
+                .target(Modules.messagingFeature.target)
             ]
         ),
         Modules.design.target,
@@ -88,10 +89,10 @@ let project = Project(
         Modules.localization.target,
         Modules.core.target,
         Modules.localicationCodegen,
-        Modules.colorPaletteCodegen
+        Modules.colorPaletteCodegen,
+        Modules.messagingFeature.target
     ]
 )
-
 
 enum Modules: CaseIterable {
     case core
@@ -105,7 +106,7 @@ enum Modules: CaseIterable {
     case map
     case profile
     case contributors
-    
+    case messagingFeature
     
     var target: Target {
         switch self {
@@ -207,6 +208,16 @@ enum Modules: CaseIterable {
                 dependencies: [
                     .target(Modules.core.target),
                     .target(Modules.design.target)
+                ]
+            )
+        case .messagingFeature:
+            Target.featureTarget(
+                name: "MessagingFeature",
+                productName: "MessagingFeature",
+                dependencies: [
+                    .target(Modules.core.target),
+                    .target(Modules.design.target),
+                    .target(Modules.network.target)
                 ]
             )
         }
