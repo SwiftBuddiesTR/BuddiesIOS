@@ -115,8 +115,9 @@ enum Modules: CaseIterable {
                 name: "Core",
                 productName: "Core",
                 dependencies:
-                    [.target(Modules.auth.target), .target(Modules.network.target),
-                        .package(product: "GoogleSignIn", type: .runtime, condition: .none)]
+                    [.target(Modules.auth.target),
+                     .target(Modules.network.target),
+                     .package(product: "GoogleSignIn", type: .runtime, condition: .none)]
             )
         case .localization:
             Target.featureTarget(

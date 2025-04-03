@@ -6,10 +6,17 @@
 //
 
 import SwiftUI
+import Localization
 
-struct MessagingView: View {
-    var body: some View {
-        Text("Hello, World!")
+public struct MessagingView: View {
+    private let module: MessagingModule
+    
+    public init() {
+        self.module = MessagingModule()
+    }
+    
+    public var body: some View {
+        MessagingFlow(module: module)
     }
 }
 

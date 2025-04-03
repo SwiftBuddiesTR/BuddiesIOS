@@ -17,13 +17,13 @@ struct AboutView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.blue)
                 
-                L.about_paragraph1
+                L.about_paragraph_1
                     .foregroundColor(.primary)
                 
-                L.about_paragraph2
+                L.about_paragraph_2
                     .foregroundColor(.primary)
                 
-                L.about_paragraph3
+                L.about_paragraph_3
                     .foregroundColor(.primary)
                 
                 L.about_welcome

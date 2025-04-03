@@ -4,12 +4,14 @@ import Map
 import Contributors
 import Profile
 import Localization
+import MessagingFeature
 
 enum AppTab: Int, Identifiable {
     case feed = 0
     case map
     case profile
     case contributors
+    case messaging
     
     var id: Int { rawValue }
 }
@@ -46,6 +48,13 @@ struct TabFlowView: View {
                     L.tab_contributors
                 }
                 .tag(AppTab.contributors)
+                
+            MessagingView()
+                .tabItem {
+                    Image(systemName: "message.fill")
+                    L.tab_messaging
+                }
+                .tag(AppTab.messaging)
         }
     }
 }
