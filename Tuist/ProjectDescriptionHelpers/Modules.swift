@@ -10,6 +10,35 @@ import ProjectDescription
 public let networkModule = TargetDependency.project(target: "Network",
                                                     path: .relativeToRoot("Modules/NetworkModule"))
 
+public let coreModule = TargetDependency.project(target: "Core",
+                                               path: .relativeToRoot("Modules/CoreModule"))
+
+public let localizationModule = TargetDependency.project(target: "Localization",
+                                                       path: .relativeToRoot("Modules/LocalizationModule"))
+
+public let designModule = TargetDependency.project(target: "Design",
+                                                 path: .relativeToRoot("Modules/DesignModule"))
+
+public let authModule = TargetDependency.project(target: "Auth",
+                                               path: .relativeToRoot("Modules/AuthModule"))
+
+public let onboardingModule = TargetDependency.project(target: "Onboarding",
+                                                     path: .relativeToRoot("Modules/OnboardingModule"))
+
+public let loginModule = TargetDependency.project(target: "Login",
+                                                path: .relativeToRoot("Modules/LoginModule"))
+
+public let feedModule = TargetDependency.project(target: "Feed",
+                                               path: .relativeToRoot("Modules/FeedModule"))
+
+public let mapModule = TargetDependency.project(target: "Map",
+                                              path: .relativeToRoot("Modules/MapModule"))
+
+public let profileModule = TargetDependency.project(target: "Profile",
+                                                  path: .relativeToRoot("Modules/ProfileModule"))
+
+public let contributorsModule = TargetDependency.project(target: "Contributors",
+                                                       path: .relativeToRoot("Modules/ContributorsModule"))
 
 public enum Module: String, CaseIterable {
     case core
@@ -27,14 +56,32 @@ public enum Module: String, CaseIterable {
     case buddiesNetwork = "BuddiesNetwork"
 
     public var targetDependency: TargetDependency {
-        if self == .network {
+        switch self {
+        case .network:
             return networkModule
-        }
-        if self == .googleSignIn || self == .buddiesNetwork {
+        case .core:
+            return coreModule
+        case .localization:
+            return localizationModule
+        case .design:
+            return designModule
+        case .auth:
+            return authModule
+        case .onboarding:
+            return onboardingModule
+        case .login:
+            return loginModule
+        case .feed:
+            return feedModule
+        case .map:
+            return mapModule
+        case .profile:
+            return profileModule
+        case .contributors:
+            return contributorsModule
+        case .googleSignIn, .buddiesNetwork:
             return .external(name: self.rawValue)
         }
-
-        return .target(target)
     }
 
     public var target: Target {

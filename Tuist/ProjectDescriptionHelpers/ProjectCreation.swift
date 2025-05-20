@@ -23,7 +23,7 @@ public extension Project {
                     sources: [
                         "\(name)Module/Sources/**"
                     ],
-                    resources: hasResources ? ["Modules/Targets/\(name)Module/Resources/**"] : [],
+                    resources: hasResources ? ["\(name)Module/Resources/**"] : [],
                     dependencies: dependencies.compactMap({ $0.targetDependency }))
             ]
         )
