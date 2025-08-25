@@ -9,13 +9,21 @@ import SwiftUI
 
 @MainActor
 final class BuddiesFeedCoordinator: ObservableObject {
-    enum BuddiesFeedRoute: Hashable {
+    enum BuddiesFeedRoute: Hashable, Identifiable {
+        var id: Int {
+            switch self {
+            default:
+                self.hashValue
+            }
+        }
+
         case addPost
         case postDetail(String)
         case userProfile(String)
     }
     
     @Published var navigationStack: [BuddiesFeedRoute] = []
+    @Published var presented: BuddiesFeedRoute?
     
     func push(_ route: BuddiesFeedRoute) {
         navigationStack.append(route)
@@ -27,6 +35,14 @@ final class BuddiesFeedCoordinator: ObservableObject {
     
     func pop() {
         navigationStack.removeLast()
+    }
+    
+    func present(_ route: BuddiesFeedRoute) {
+        presented = route
+    }
+    
+    func dismissSheet() {
+        presented = nil
     }
 }
 
@@ -44,16 +60,27 @@ public struct FeedFlow: View {
             module.getFeedView()
                 .environmentObject(coordinator)
                 .navigationDestination(for: BuddiesFeedCoordinator.BuddiesFeedRoute.self) { route in
-                    switch route {
-                    case .addPost:
-                        AddPostView()
-                            .environmentObject(coordinator)
-                    case .postDetail(let postId):
-                        Text("Post Detail View: \(postId)")
-                    case .userProfile(let userId):
-                        Text("User Profile: \(userId)")
-                    }
+                    routeTo(route)
                 }
+                .sheet(item: $coordinator.presented) { route in
+                    routeTo(route)
+                }
+                .fullScreenCover(item: $coordinator.presented) { item in
+                    routeTo(item)
+                }
+        }
+    }
+    
+    @ViewBuilder
+    func routeTo(_ route: BuddiesFeedCoordinator.BuddiesFeedRoute) -> some View {
+        switch route {
+        case .addPost:
+            AddPostView()
+                .environmentObject(coordinator)
+        case .postDetail(let postId):
+            Text("Post Detail View: \(postId)")
+        case .userProfile(let userId):
+            Text("User Profile: \(userId)")
         }
     }
 }
