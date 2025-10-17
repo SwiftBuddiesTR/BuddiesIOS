@@ -1,71 +1,83 @@
 import ProjectDescription
+import Foundation
 import ProjectDescriptionHelpers
-import MyPlugin
 
-extension Target {
-    static func makeModule(name: String, dependencies: [TargetDependency] = [], hasResources: Bool = false) -> Target {
-        Target(
-            name: name,
-            platform: .iOS,
-            product: .framework,
-            productName: name,
-            bundleId: "com.swiftbuddies.\(name.lowercased())",
-            sources: ["Targets/SwiftBuddies\(name)/Sources/**"],
-            resources: hasResources ? ["Targets/SwiftBuddies\(name)/Resources/**"] : [],
-            dependencies: dependencies
-        )
-    }
-}
-
-extension TargetDependency {
-    static func makeExternalTarget(name: String) -> TargetDependency {
-        TargetDependency.external(name: name, condition: nil)
-    }
-}
-
-// MARK: - Project
-
-// Local plugin loaded
-let localHelper = LocalHelper(name: "MyPlugin")
-
-let networkDependency = TargetDependency.makeExternalTarget(name: "DefaultNetworkOperationPackage")
-let swiftUIXDependency = TargetDependency.makeExternalTarget(name: "SwiftUIX")
-let designTarget = Target.makeModule(
-    name: "Design",
-    dependencies: [swiftUIXDependency],
-    hasResources: true
+let project = Project(
+    name: "Buddies",
+    targets: [
+        .target(
+            name: "SwiftBuddiesIOS",
+            destinations: .iOS,
+            product: .app,
+            bundleId: "com.dogukaank.SwiftBuddiesIOS",
+            deploymentTargets: .iOS("17.0"),
+            infoPlist: .extendingDefault(
+                with: [
+                    "CFBundleShortVersionString": "0.0.1",
+                    "CFBundleVersion": "1",
+                    "UIMainStoryboardFile": "",
+                    "UILaunchStoryboardName": "LaunchScreen",
+                    "CLIENT_ID": "1015261010783-dq3s025o2j6pcj81ped6nqpbiv5m1fvr.apps.googleusercontent.com",
+                    "REVERSED_CLIENT_ID": "com.googleusercontent.apps.1015261010783-dq3s025o2j6pcj81ped6nqpbiv5m1fvr",
+                    "NSLocationWhenInUseUsageDescription": "Your location is needed to provide location-based features.",
+                    "NSCameraUsageDescription": "Camera is needed to take photos.",
+                    "CFBundleURLTypes": [
+                        ["CFBundleURLSchemes": ["com.googleusercontent.apps.1015261010783-dq3s025o2j6pcj81ped6nqpbiv5m1fvr"]]
+                    ],
+                    "ITSAppUsesNonExemptEncryption": false
+                ]
+            ),
+            sources: ["SwiftBuddiesIOS/Sources/**"],
+            resources: ["SwiftBuddiesIOS/Resources/**"],
+            entitlements: .dictionary(
+                [
+                    "com.apple.developer.applesignin" : ["Default"],
+                    "com.apple.developer.authentication-services.autofill-credential-provider": true
+                ]
+            ),
+            dependencies: [
+                Module.googleSignIn.targetDependency,
+                Module.buddiesNetwork.targetDependency,
+                Module.design.targetDependency,
+                Module.auth.targetDependency,
+                Module.login.targetDependency,
+                Module.onboarding.targetDependency,
+                Module.feed.targetDependency,
+                Module.map.targetDependency,
+                Module.profile.targetDependency,
+                Module.contributors.targetDependency,
+                Module.localization.targetDependency,
+                Module.core.targetDependency,
+                Module.network.targetDependency,
+            ]
+        ),
+        Module.localicationCodegen,
+        Module.colorPaletteCodegen
+    ]
 )
 
-let contributorsModule = Target.makeModule(
-    name: "Contributors",
-    dependencies: [.target(designTarget), networkDependency]
-)
-let mapModule = Target.makeModule(
-    name: "Map",
-    dependencies: [.target(designTarget), networkDependency]
-)
-let aboutModule = Target.makeModule(
-    name: "About",
-    dependencies: [.target(designTarget), networkDependency]
-)
-let feedModule = Target.makeModule(
-    name: "Feed",
-    dependencies: [.target(designTarget), networkDependency]
-)
-
-
-// Creates our project using a helper function defined in ProjectDescriptionHelpers
-let project = Project.app(
-    name: "SwiftBuddiesMain",
-    platform: .iOS,
-    additionalTargets: [
-        feedModule,
-        mapModule,
-        aboutModule,
-        contributorsModule,
-        designTarget
-    ],
-    targetDependencies: [networkDependency]
-)
-
-
+//let scriptsModule = Target.target(
+//    name: "Scripts",
+//    destinations: .macOS,
+//    product: .staticFramework,
+//    productName: "Scripts",
+//    bundleId: "com.swiftbuddies.scripts",
+//    deploymentTargets: nil,
+//    infoPlist: nil,
+//
+//    sources: ["SwiftBuddiesIOS/Targets/ScriptsModule/**"],
+//    resources: nil,
+//    copyFiles: nil,
+//    headers: nil,
+//    entitlements: nil,
+//    scripts: [],
+//    dependencies: [.target(localicationCodegen)],
+//    settings: nil,
+//    coreDataModels: [],
+//    environmentVariables: [:],
+//    launchArguments: [],
+//    additionalFiles: [],
+//    buildRules: [],
+//    mergedBinaryType: .automatic,
+//    mergeable: false
+//)
